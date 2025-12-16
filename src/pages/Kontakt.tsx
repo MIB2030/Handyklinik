@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, Phone } from 'lucide-react';
+import { MapPin, Clock, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { supabase } from '../lib/supabase';
 
@@ -42,15 +42,9 @@ export default function Kontakt() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link
-          to="/"
-          className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5 mr-2" />
-          Zurück zur Startseite
-        </Link>
+      <Header />
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Kontakt</h1>
 
         <div className="grid lg:grid-cols-2 gap-12 mb-12">

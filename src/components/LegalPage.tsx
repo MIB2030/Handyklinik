@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import Header from './Header';
 import Footer from './Footer';
 import { useLegalText } from '../hooks/useLegalText';
 
@@ -18,15 +18,9 @@ export default function LegalPage({ type, title, fallbackContent }: LegalPagePro
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link
-          to="/"
-          className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5 mr-2" />
-          Zurück zur Startseite
-        </Link>
+      <Header />
 
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">{title}</h1>
 
         {isLoading && (
