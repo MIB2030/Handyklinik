@@ -57,7 +57,7 @@ interface RepairCardProps {
 }
 
 function RepairCard({ repair, onWhatsAppClick, onEmailClick, onInfoClick }: RepairCardProps) {
-  const isBackcoverRepair = repair.reparatur.toLowerCase().includes('backcover');
+  const isBackcoverRepair = repair.reparatur.toLowerCase().includes('backcover') || repair.reparatur.toLowerCase().includes('wasserschaden');
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
@@ -106,7 +106,7 @@ interface InfoModalProps {
 function InfoModal({ repair, onClose }: InfoModalProps) {
   if (!repair) return null;
 
-  const isBackcoverRepair = repair.reparatur.toLowerCase().includes('backcover');
+  const isBackcoverRepair = repair.reparatur.toLowerCase().includes('backcover') || repair.reparatur.toLowerCase().includes('wasserschaden');
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -269,7 +269,7 @@ export default function RepairConfigurator() {
   }
 
   function handleWhatsAppRequest(repair: RepairPrice) {
-    const isBackcoverRepair = repair.reparatur.toLowerCase().includes('backcover');
+    const isBackcoverRepair = repair.reparatur.toLowerCase().includes('backcover') || repair.reparatur.toLowerCase().includes('wasserschaden');
     const priceText = isBackcoverRepair ? `ab ${repair.preis.toFixed(2).replace('.', ',')} €` : `${repair.preis.toFixed(2).replace('.', ',')} €`;
     const message = `Hallo, ich interessiere mich für folgende Reparatur:\n\nGerät: ${selectedManufacturer} ${selectedModel}\nReparatur: ${repair.reparatur}\nPreis: ${priceText}\n\nBitte kontaktieren Sie mich für einen Termin.`;
     const whatsappUrl = `https://wa.me/4915226878225?text=${encodeURIComponent(message)}`;
