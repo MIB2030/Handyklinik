@@ -24,7 +24,7 @@ export default function CookieRichtlinie() {
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Einführung</h2>
             <p className="text-gray-700 leading-relaxed">
-              Unsere Website, <a href="https://mobilfunk-service-ottobrunn.de" className="text-blue-600 hover:underline">https://mobilfunk-service-ottobrunn.de</a> (im folgenden: „Die Website") verwendet ausschließlich technisch notwendige Cookies und ähnliche Technologien. In dem unten stehenden Dokument informieren wir Sie über die Verwendung auf unserer Website.
+              Unsere Website, <a href="https://handyklinikottobrunn.de" className="text-blue-600 hover:underline">https://handyklinikottobrunn.de</a> (im folgenden: „Die Website") verwendet ausschließlich technisch notwendige Cookies und ähnliche Technologien. In dem unten stehenden Dokument informieren wir Sie über die Verwendung auf unserer Website.
             </p>
           </div>
 
@@ -108,7 +108,7 @@ export default function CookieRichtlinie() {
               <p>85521 Ottobrunn</p>
               <p>Deutschland</p>
               <p className="mt-4">
-                Website: <a href="https://mobilfunk-service-ottobrunn.de" className="text-blue-600 hover:underline">https://mobilfunk-service-ottobrunn.de</a>
+                Website: <a href="https://handyklinikottobrunn.de" className="text-blue-600 hover:underline">https://handyklinikottobrunn.de</a>
               </p>
               <p>
                 E-Mail: <a href="mailto:info@mnw-mobilfunk.de" className="text-blue-600 hover:underline">info@mnw-mobilfunk.de</a>
