@@ -1,0 +1,27 @@
+# robots.txt für MNW Mobilfunk
+# Letzte Aktualisierung: 2025-12-06
+
+User-agent: *
+Allow: /
+
+# Sitemap Location
+Sitemap: https://mnw-mobilfunk.de/sitemap.xml
+
+# Crawl-Delay
+Crawl-delay: 10
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /api/
+
+# Allow important pages
+Allow: /
+Allow: /kontakt
+Allow: /datenschutz
+Allow: /impressum
+Allow: /cookie-richtlinie
+
+# Disallow authentication pages
+Disallow: /auth/
+Disallow: /*?token=*
+Disallow: /*?session=*
