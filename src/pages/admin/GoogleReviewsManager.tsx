@@ -39,6 +39,11 @@ interface ReviewStats {
   one_star: number;
 }
 
+interface Notification {
+  type: 'success' | 'error';
+  message: string;
+}
+
 export default function GoogleReviewsManager() {
   const [reviews, setReviews] = useState<GoogleReview[]>([]);
   const [syncLogs, setSyncLogs] = useState<SyncLog[]>([]);
@@ -59,6 +64,7 @@ export default function GoogleReviewsManager() {
   const [showOnlyVisible, setShowOnlyVisible] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [importing, setImporting] = useState(false);
+  const [notification, setNotification] = useState<Notification | null>(null);
   const [manualReview, setManualReview] = useState({
     author_name: '',
     rating: 5,
@@ -77,6 +83,19 @@ export default function GoogleReviewsManager() {
       calculateStats(reviews);
     }
   }, [reviews]);
+
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
+  const showNotification = (type: 'success' | 'error', message: string) => {
+    setNotification({ type, message });
+  };
 
   const fetchReviews = async () => {
     try {
@@ -149,12 +168,12 @@ export default function GoogleReviewsManager() {
         throw new Error(result.error || 'Sync failed');
       }
 
-      alert(`Erfolg! ${result.totalReviews} Bewertungen synchronisiert (${result.newReviews} neu, ${result.updatedReviews} aktualisiert)`);
+      showNotification('success', `Erfolg! ${result.totalReviews} Bewertungen synchronisiert (${result.newReviews} neu, ${result.updatedReviews} aktualisiert)`);
       await fetchReviews();
       await fetchSyncLogs();
     } catch (error: any) {
       console.error('Error syncing reviews:', error);
-      alert(`Fehler beim Synchronisieren: ${error.message}`);
+      showNotification('error', `Fehler beim Synchronisieren: ${error.message}`);
     } finally {
       setSyncing(false);
     }
@@ -162,7 +181,7 @@ export default function GoogleReviewsManager() {
 
   const handleManualImport = async () => {
     if (!manualReview.author_name || !manualReview.text) {
-      alert('Bitte Name und Bewertungstext ausfüllen');
+      showNotification('error', 'Bitte Name und Bewertungstext ausfüllen');
       return;
     }
 
@@ -185,7 +204,7 @@ export default function GoogleReviewsManager() {
 
       if (error) throw error;
 
-      alert('Bewertung erfolgreich hinzugefügt!');
+      showNotification('success', 'Bewertung erfolgreich hinzugefügt!');
       setShowImportModal(false);
       setManualReview({
         author_name: '',
@@ -197,7 +216,7 @@ export default function GoogleReviewsManager() {
       await fetchReviews();
     } catch (error: any) {
       console.error('Error importing review:', error);
-      alert(`Fehler beim Importieren: ${error.message}`);
+      showNotification('error', `Fehler beim Importieren: ${error.message}`);
     } finally {
       setImporting(false);
     }
@@ -215,7 +234,7 @@ export default function GoogleReviewsManager() {
       await fetchReviews();
     } catch (error) {
       console.error('Error toggling visibility:', error);
-      alert('Fehler beim Aktualisieren der Sichtbarkeit');
+      showNotification('error', 'Fehler beim Aktualisieren der Sichtbarkeit');
     }
   };
 
@@ -231,7 +250,7 @@ export default function GoogleReviewsManager() {
       await fetchReviews();
     } catch (error) {
       console.error('Error toggling featured:', error);
-      alert('Fehler beim Aktualisieren des Featured-Status');
+      showNotification('error', 'Fehler beim Aktualisieren des Featured-Status');
     }
   };
 
@@ -286,6 +305,39 @@ export default function GoogleReviewsManager() {
 
   return (
     <div className="space-y-6">
+      {notification && (
+        <div
+          className={`fixed top-4 right-4 z-50 max-w-md rounded-lg shadow-lg p-4 flex items-center space-x-3 ${
+            notification.type === 'success'
+              ? 'bg-green-50 border border-green-200'
+              : 'bg-red-50 border border-red-200'
+          }`}
+        >
+          {notification.type === 'success' ? (
+            <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
+          ) : (
+            <X className="w-5 h-5 text-red-600 flex-shrink-0" />
+          )}
+          <p
+            className={`text-sm font-medium ${
+              notification.type === 'success' ? 'text-green-800' : 'text-red-800'
+            }`}
+          >
+            {notification.message}
+          </p>
+          <button
+            onClick={() => setNotification(null)}
+            className={`ml-auto flex-shrink-0 ${
+              notification.type === 'success'
+                ? 'text-green-600 hover:text-green-800'
+                : 'text-red-600 hover:text-red-800'
+            }`}
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Google Reviews Verwaltung</h1>
         <div className="flex items-center space-x-3">
