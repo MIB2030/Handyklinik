@@ -40,149 +40,144 @@ export default function Contact() {
 
   return (
     <>
-      <section className="py-16 bg-gradient-to-b from-blue-50/30 to-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <button
-            onClick={() => setIsWertgarantieModalOpen(true)}
-            className="w-full bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border-2 border-blue-200 hover:shadow-lg transition-all"
-          >
-            <div className="text-center">
-              <div className="inline-flex items-center space-x-2 mb-4">
-                <Shield className="w-7 h-7 text-blue-600" />
-                <h3 className="text-2xl font-bold text-gray-900">WERTGARANTIE Partner</h3>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 text-center shadow-md">
-              <div className="flex justify-center mb-6">
-                <img
-                  src="/wertgarantie_logo_1.jpg"
-                  alt="WERTGARANTIE Logo"
-                  className="h-16 w-auto object-contain"
-                />
-              </div>
-              <p className="text-gray-600 mb-6">
-                Zertifizierter Partner für professionelle Reparaturdienstleistungen
-              </p>
-              <div
-                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-colors cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsWertgarantieModalOpen(true);
-                }}
-              >
-                Mehr erfahren
-              </div>
-            </div>
-          </button>
-
-          <button
-            onClick={() => setIsVoucherModalOpen(true)}
-            className="w-full bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-8 border-2 border-yellow-300 hover:shadow-lg transition-all"
-          >
-            <div className="text-center">
-              <div className="inline-flex items-center space-x-2 mb-4">
-                <Gift className="w-7 h-7 text-yellow-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Gutschein</h3>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 text-center shadow-md">
-              <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Gift className="w-8 h-8 text-white" />
-              </div>
-              <div className="text-5xl font-bold text-yellow-600 mb-2">10€</div>
-              <div className="text-lg font-semibold text-gray-800 mb-2">Reparatur-Gutschein</div>
-              <div className="text-sm text-gray-600">Jetzt sichern!</div>
-            </div>
-          </button>
-
-          <button
-            onClick={() => setIsContactModalOpen(true)}
-            className="w-full bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 text-center border-2 border-blue-200 hover:shadow-lg transition-all"
-          >
-            <div className="text-center">
-              <div className="inline-flex items-center space-x-2 mb-4">
-                <Phone className="w-7 h-7 text-blue-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Kontakt</h3>
-              </div>
-            </div>
-
-            <div className="text-sm text-gray-600 mb-2">Telefon</div>
-            <a
-              href={`tel:${companyInfo.phone.replace(/\s/g, '')}`}
-              className="text-3xl font-bold text-blue-600 hover:text-blue-700 transition-colors mb-6 block"
-            >
-              {companyInfo.phone}
-            </a>
-
-            <div className="border-t border-blue-200 my-6"></div>
-
-            <div className="text-sm text-gray-600 mb-2">Adresse</div>
-            <div className="text-gray-800 font-medium">
-              <p>{companyInfo.street}</p>
-              <p className="mb-2">{companyInfo.postal_code} {companyInfo.city}</p>
-              <p className="text-blue-600 text-sm">(Im IsarCenter)</p>
-            </div>
-          </button>
-
-          <div className="w-full bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border-2 border-green-200 shadow-md">
-            <div className="text-center">
-              <div className="inline-flex items-center space-x-2 mb-6">
-                <Clock className="w-7 h-7 text-green-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Öffnungszeiten</h3>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-md max-w-md mx-auto">
-              <div className="space-y-3">
-                <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                  <span className="font-semibold text-gray-700">Montag - Freitag</span>
-                  <span className="text-green-600 font-bold">09:00 - 18:00</span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                  <span className="font-semibold text-gray-700">Samstag</span>
-                  <span className="text-green-600 font-bold">10:00 - 14:00</span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="font-semibold text-gray-700">Sonntag</span>
-                  <span className="text-red-600 font-bold">Geschlossen</span>
-                </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-gray-200 text-center">
-                <p className="text-sm text-gray-600">
-                  Termine nach Vereinbarung auch außerhalb der Öffnungszeiten möglich
-                </p>
-              </div>
-            </div>
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-3">Kontakt & Informationen</h2>
+            <p className="text-lg text-gray-600">Wir sind für Sie da</p>
           </div>
 
-          <div className="w-full bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-gray-200">
-            <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100">
-              <h3 className="text-xl font-bold text-gray-900">Standort</h3>
-              <p className="text-sm text-gray-600">Unterhachinger Str. 28, 85521 Ottobrunn</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <button
+              onClick={() => setIsContactModalOpen(true)}
+              className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-300 hover:-translate-y-1"
+            >
+              <div className="flex flex-col items-center text-center h-full">
+                <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+                  <Phone className="w-7 h-7 text-blue-600 group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Telefon</h3>
+                <a
+                  href={`tel:${companyInfo.phone.replace(/\s/g, '')}`}
+                  className="text-xl font-bold text-blue-600 hover:text-blue-700 mb-3"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {companyInfo.phone}
+                </a>
+                <div className="text-sm text-gray-500 mt-auto">
+                  <p className="font-medium">{companyInfo.street}</p>
+                  <p>{companyInfo.postal_code} {companyInfo.city}</p>
+                  <p className="text-blue-600 text-xs mt-1">(Im IsarCenter)</p>
+                </div>
+              </div>
+            </button>
+
+            <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+              <div className="flex flex-col items-center text-center h-full">
+                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <Clock className="w-7 h-7 text-green-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Öffnungszeiten</h3>
+                <div className="space-y-2 text-sm flex-1">
+                  <div className="flex justify-between items-center gap-3">
+                    <span className="text-gray-600">Mo - Fr</span>
+                    <span className="font-semibold text-gray-900">09:00 - 18:00</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-3">
+                    <span className="text-gray-600">Samstag</span>
+                    <span className="font-semibold text-gray-900">10:00 - 14:00</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-3">
+                    <span className="text-gray-600">Sonntag</span>
+                    <span className="font-semibold text-red-600">Geschlossen</span>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-4">Termine auch außerhalb möglich</p>
+              </div>
             </div>
-            <div className="relative w-full h-96">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2665.8!2d11.6642!3d48.0657!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDAzJzU2LjUiTiAxMcKwMzknNTEuMSJF!5e0!3m2!1sde!2sde!4v1234567890"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="MNW Mobilfunk Standort in Ottobrunn"
-              />
-            </div>
-            <div className="p-4 bg-gray-50 text-center">
-              <a
-                href="https://www.google.com/maps/dir//48.0657,11.6642"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
-              >
-                Route planen
-              </a>
+
+            <button
+              onClick={() => setIsVoucherModalOpen(true)}
+              className="group bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="flex flex-col items-center text-center h-full justify-between">
+                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-3">
+                  <Gift className="w-7 h-7 text-yellow-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Gutschein</h3>
+                  <div className="text-5xl font-black text-white mb-1">10€</div>
+                  <p className="text-sm font-semibold text-gray-900">Reparatur-Gutschein</p>
+                </div>
+                <div className="mt-4 text-xs font-semibold text-gray-900 bg-white/30 px-4 py-2 rounded-full">
+                  Jetzt sichern!
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setIsWertgarantieModalOpen(true)}
+              className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-300 hover:-translate-y-1"
+            >
+              <div className="flex flex-col items-center text-center h-full justify-between">
+                <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-blue-600 transition-colors">
+                  <Shield className="w-7 h-7 text-blue-600 group-hover:text-white transition-colors" />
+                </div>
+                <div className="flex-1 flex flex-col justify-center">
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">WERTGARANTIE</h3>
+                  <img
+                    src="/wertgarantie_logo_1.jpg"
+                    alt="WERTGARANTIE Logo"
+                    className="h-12 w-auto object-contain mx-auto mb-3"
+                  />
+                  <p className="text-xs text-gray-600">Zertifizierter Partner</p>
+                </div>
+                <div className="mt-4 text-xs font-semibold text-blue-600">Mehr erfahren →</div>
+              </div>
+            </button>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+            <div className="grid md:grid-cols-2">
+              <div className="relative h-80 md:h-auto">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2665.8!2d11.6642!3d48.0657!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDAzJzU2LjUiTiAxMcKwMzknNTEuMSJF!5e0!3m2!1sde!2sde!4v1234567890"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="MNW Mobilfunk Standort in Ottobrunn"
+                  className="absolute inset-0"
+                />
+              </div>
+              <div className="p-8 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Besuchen Sie uns</h3>
+                  <p className="text-gray-600 mb-4">Direkt im IsarCenter Ottobrunn</p>
+                  <div className="space-y-2 text-gray-700">
+                    <p className="font-medium">{companyInfo.street}</p>
+                    <p className="font-medium">{companyInfo.postal_code} {companyInfo.city}</p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <a
+                    href="https://www.google.com/maps/dir//48.0657,11.6642"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center"
+                  >
+                    Route planen
+                  </a>
+                  <a
+                    href={`tel:${companyInfo.phone.replace(/\s/g, '')}`}
+                    className="block w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center"
+                  >
+                    Jetzt anrufen
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
