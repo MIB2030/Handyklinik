@@ -70,44 +70,31 @@ Deno.serve(async (req: Request) => {
 
       const { data: existingReview } = await supabase
         .from("google_reviews")
-        .select("id, is_visible, is_featured")
+        .select("id")
         .eq("google_review_id", googleReviewId)
         .maybeSingle();
 
       if (existingReview) {
-        const updateData = {
-          author_name: review.author_name,
-          author_photo_url: review.profile_photo_url || null,
-          rating: review.rating,
-          text: review.text || null,
-          time: new Date(review.time * 1000).toISOString(),
-          relative_time_description: review.relative_time_description,
-          updated_at: new Date().toISOString(),
-        };
-
-        await supabase
-          .from("google_reviews")
-          .update(updateData)
-          .eq("id", existingReview.id);
         updatedReviewsCount++;
-      } else {
-        const insertData = {
-          google_review_id: googleReviewId,
-          author_name: review.author_name,
-          author_photo_url: review.profile_photo_url || null,
-          rating: review.rating,
-          text: review.text || null,
-          time: new Date(review.time * 1000).toISOString(),
-          relative_time_description: review.relative_time_description,
-          is_visible: true,
-          is_featured: review.rating === 5,
-        };
-
-        await supabase
-          .from("google_reviews")
-          .insert(insertData);
-        newReviewsCount++;
+        continue;
       }
+
+      const insertData = {
+        google_review_id: googleReviewId,
+        author_name: review.author_name,
+        author_photo_url: review.profile_photo_url || null,
+        rating: review.rating,
+        text: review.text || null,
+        time: new Date(review.time * 1000).toISOString(),
+        relative_time_description: review.relative_time_description,
+        is_visible: true,
+        is_featured: review.rating === 5,
+      };
+
+      await supabase
+        .from("google_reviews")
+        .insert(insertData);
+      newReviewsCount++;
     }
 
     await supabase.from("google_reviews_sync_log").insert({
@@ -120,7 +107,7 @@ Deno.serve(async (req: Request) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: `${newReviewsCount} neue und ${updatedReviewsCount} aktualisierte Bewertungen synchronisiert`,
+        message: `${newReviewsCount} neue und ${updatedReviewsCount} bereits vorhandene Bewertungen gefunden`,
         totalReviews: reviews.length,
         newReviews: newReviewsCount,
         updatedReviews: updatedReviewsCount,
