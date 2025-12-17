@@ -41,16 +41,29 @@ export default function Contact() {
   };
 
   const loadGoogleMapsSettings = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('google_settings')
       .select('api_key, place_id')
       .maybeSingle();
 
-    if (data?.api_key && data?.place_id) {
-      const url = `https://www.google.com/maps/embed/v1/place?key=${data.api_key}&q=place_id:${data.place_id}`;
-      console.log('Google Maps URL:', url);
-      setGoogleMapsUrl(url);
+    if (error) {
+      console.error('Fehler beim Laden der Google Settings:', error);
+      return;
     }
+
+    if (!data) {
+      console.warn('Keine Google Settings in der Datenbank gefunden');
+      return;
+    }
+
+    if (!data.api_key || !data.place_id) {
+      console.warn('API Key oder Place ID fehlt:', { api_key: !!data.api_key, place_id: !!data.place_id });
+      return;
+    }
+
+    const url = `https://www.google.com/maps/embed/v1/place?key=${data.api_key}&q=place_id:${data.place_id}`;
+    console.log('Google Maps URL generiert:', url);
+    setGoogleMapsUrl(url);
   };
 
   return (
