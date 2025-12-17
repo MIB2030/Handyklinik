@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, AlertCircle, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface Announcement {
@@ -21,6 +21,44 @@ const colorOptions = [
   { value: 'orange', label: 'Orange (Aufmerksamkeit)', bgClass: 'bg-orange-100', textClass: 'text-orange-800', borderClass: 'border-orange-200' },
   { value: 'yellow', label: 'Gelb (Hinweis)', bgClass: 'bg-yellow-100', textClass: 'text-yellow-800', borderClass: 'border-yellow-200' }
 ];
+
+const popupColorClasses = {
+  red: {
+    bg: 'bg-red-50',
+    border: 'border-red-200',
+    text: 'text-red-900',
+    title: 'text-red-800',
+    button: 'bg-red-600 hover:bg-red-700'
+  },
+  blue: {
+    bg: 'bg-blue-50',
+    border: 'border-blue-200',
+    text: 'text-blue-900',
+    title: 'text-blue-800',
+    button: 'bg-blue-600 hover:bg-blue-700'
+  },
+  green: {
+    bg: 'bg-green-50',
+    border: 'border-green-200',
+    text: 'text-green-900',
+    title: 'text-green-800',
+    button: 'bg-green-600 hover:bg-green-700'
+  },
+  orange: {
+    bg: 'bg-orange-50',
+    border: 'border-orange-200',
+    text: 'text-orange-900',
+    title: 'text-orange-800',
+    button: 'bg-orange-600 hover:bg-orange-700'
+  },
+  yellow: {
+    bg: 'bg-yellow-50',
+    border: 'border-yellow-200',
+    text: 'text-yellow-900',
+    title: 'text-yellow-800',
+    button: 'bg-yellow-600 hover:bg-yellow-700'
+  }
+};
 
 export default function PopManager() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -201,17 +239,18 @@ export default function PopManager() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">
-            {editingId ? 'Ankündigung bearbeiten' : 'Neue Ankündigung'}
-          </h2>
-          <p className="text-sm text-gray-600">
-            Änderungen werden sofort für alle Endkunden wirksam. Deaktivierte Pop-ups werden nicht mehr angezeigt.
-          </p>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              {editingId ? 'Ankündigung bearbeiten' : 'Neue Ankündigung'}
+            </h2>
+            <p className="text-sm text-gray-600">
+              Änderungen werden sofort für alle Endkunden wirksam. Deaktivierte Pop-ups werden nicht mehr angezeigt.
+            </p>
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Titel (optional)
@@ -355,7 +394,72 @@ export default function PopManager() {
               </button>
             )}
           </div>
-        </form>
+          </form>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">Live-Vorschau</h2>
+            <p className="text-sm text-gray-600">
+              So wird das Pop-up für Endkunden angezeigt
+            </p>
+          </div>
+
+          <div className="relative bg-gray-100 rounded-lg p-4 min-h-[400px] flex items-center justify-center">
+            {formData.message ? (
+              <div className="relative w-full max-w-md">
+                <div
+                  className={`relative ${popupColorClasses[formData.color].bg} ${popupColorClasses[formData.color].border} border-2 rounded-2xl shadow-2xl p-6 md:p-8`}
+                >
+                  <button
+                    type="button"
+                    className={`absolute top-4 right-4 p-2 rounded-full ${popupColorClasses[formData.color].button} text-white transition-all hover:scale-110`}
+                    disabled
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+
+                  <div className="pr-10">
+                    {formData.title && (
+                      <h2
+                        className={`text-2xl md:text-3xl font-bold ${popupColorClasses[formData.color].title} mb-4`}
+                      >
+                        {formData.title}
+                      </h2>
+                    )}
+
+                    <p
+                      className={`text-base md:text-lg ${popupColorClasses[formData.color].text} whitespace-pre-wrap leading-relaxed`}
+                    >
+                      {formData.message}
+                    </p>
+                  </div>
+
+                  <div className="mt-6 flex justify-end">
+                    <button
+                      type="button"
+                      className={`px-6 py-3 ${popupColorClasses[formData.color].button} text-white font-semibold rounded-lg transition-all hover:scale-105`}
+                      disabled
+                    >
+                      Verstanden
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center text-gray-500">
+                <AlertCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p className="text-sm">Geben Sie eine Nachricht ein, um die Vorschau zu sehen</p>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-4 text-xs text-gray-500 space-y-1">
+            <p>• Die Vorschau zeigt das exakte Design des Popups</p>
+            <p>• Buttons in der Vorschau sind deaktiviert</p>
+            <p>• Das echte Popup wird mittig auf dem Bildschirm angezeigt</p>
+          </div>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
