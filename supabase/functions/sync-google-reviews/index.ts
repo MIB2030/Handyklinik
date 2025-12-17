@@ -36,16 +36,21 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const GOOGLE_API_KEY = Deno.env.get("GOOGLE_PLACES_API_KEY");
-    const PLACE_ID = Deno.env.get("GOOGLE_PLACE_ID");
-
-    if (!GOOGLE_API_KEY || !PLACE_ID) {
-      throw new Error("Google Places API Konfiguration fehlt. Bitte GOOGLE_PLACES_API_KEY und GOOGLE_PLACE_ID in Supabase Secrets eintragen.");
-    }
-
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data: settings, error: settingsError } = await supabase
+      .from("google_settings")
+      .select("api_key, place_id")
+      .single();
+
+    if (settingsError || !settings || !settings.api_key || !settings.place_id) {
+      throw new Error("Google Places API nicht konfiguriert. Bitte konfiguriere die API-Einstellungen im Admin-Bereich unter 'Google Einstellungen'.");
+    }
+
+    const GOOGLE_API_KEY = settings.api_key;
+    const PLACE_ID = settings.place_id;
 
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=reviews,rating,user_ratings_total&key=${GOOGLE_API_KEY}&language=de`;
     
