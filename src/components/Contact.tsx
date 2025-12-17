@@ -176,23 +176,23 @@ export default function Contact() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
-                <a
-                  href={`https://www.google.com/maps/place/?q=place_id:ChIJx1sdEwLhnUcRAiXvgjcSjYA`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute inset-0 group"
-                >
-                  <img
-                    src={`https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(companyInfo.street + ', ' + companyInfo.postal_code + ' ' + companyInfo.city)}&zoom=15&size=600x400&markers=color:red%7C${encodeURIComponent(companyInfo.street + ', ' + companyInfo.postal_code + ' ' + companyInfo.city)}&key=AIzaSyBCWzhOP25RtE7-wOTf1HowJcXuvLYF580`}
-                    alt="Standort MNW Mobilfunk"
-                    className="w-full h-full object-cover"
+                {googleMapsUrl ? (
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={googleMapsUrl}
+                    title="MNW Mobilfunk Standort in Ottobrunn"
+                    className="absolute inset-0"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 bg-white px-6 py-3 rounded-lg shadow-lg transition-opacity">
-                      <p className="text-gray-900 font-semibold">In Google Maps öffnen</p>
-                    </div>
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                    <p className="text-gray-500">Karte wird geladen...</p>
                   </div>
-                </a>
+                )}
               </div>
               <div className="p-8 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white">
                 <div className="mb-6">
