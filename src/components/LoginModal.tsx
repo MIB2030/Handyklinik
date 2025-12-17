@@ -8,7 +8,7 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const [email, setEmail] = useState('');
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -37,17 +37,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     setLoading(true);
 
     if (isResetMode) {
-      const { error: resetError } = await resetPassword(email);
+      const { error: resetError } = await resetPassword(usernameOrEmail);
 
       if (resetError) {
         setError('Fehler beim Zurücksetzen des Passworts. Bitte versuchen Sie es erneut.');
       } else {
         setSuccessMessage('Ein Link zum Zurücksetzen Ihres Passworts wurde an Ihre E-Mail-Adresse gesendet.');
-        setEmail('');
+        setUsernameOrEmail('');
       }
       setLoading(false);
     } else {
-      const { error: signInError } = await signIn(email, password);
+      const { error: signInError } = await signIn(usernameOrEmail, password);
 
       if (signInError) {
         setError('Ungültige Anmeldedaten');
@@ -63,7 +63,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     setIsResetMode(!isResetMode);
     setError('');
     setSuccessMessage('');
-    setEmail('');
+    setUsernameOrEmail('');
     setPassword('');
   };
 
@@ -89,14 +89,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              E-Mail
+            <label htmlFor="usernameOrEmail" className="block text-sm font-medium text-gray-700 mb-1">
+              {isResetMode ? 'E-Mail' : 'Benutzername'}
             </label>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type={isResetMode ? 'email' : 'text'}
+              id="usernameOrEmail"
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
+              placeholder={isResetMode ? 'E-Mail eingeben' : 'Benutzername eingeben'}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
