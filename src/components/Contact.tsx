@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Phone, Gift, Shield } from 'lucide-react';
+import { Phone, Gift, Shield, Clock } from 'lucide-react';
 import VoucherModal from './VoucherModal';
 import ContactModal from './ContactModal';
 import WertgarantieModal from './WertgarantieModal';
@@ -125,6 +125,66 @@ export default function Contact() {
               <p className="text-blue-600 text-sm">(Im IsarCenter)</p>
             </div>
           </button>
+
+          <div className="w-full bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border-2 border-green-200 shadow-md">
+            <div className="text-center">
+              <div className="inline-flex items-center space-x-2 mb-6">
+                <Clock className="w-7 h-7 text-green-600" />
+                <h3 className="text-2xl font-bold text-gray-900">Öffnungszeiten</h3>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-md max-w-md mx-auto">
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span className="font-semibold text-gray-700">Montag - Freitag</span>
+                  <span className="text-green-600 font-bold">09:00 - 18:00</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span className="font-semibold text-gray-700">Samstag</span>
+                  <span className="text-green-600 font-bold">10:00 - 14:00</span>
+                </div>
+                <div className="flex justify-between items-center py-2">
+                  <span className="font-semibold text-gray-700">Sonntag</span>
+                  <span className="text-red-600 font-bold">Geschlossen</span>
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-200 text-center">
+                <p className="text-sm text-gray-600">
+                  Termine nach Vereinbarung auch außerhalb der Öffnungszeiten möglich
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-gray-200">
+            <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100">
+              <h3 className="text-xl font-bold text-gray-900">Standort</h3>
+              <p className="text-sm text-gray-600">Unterhachinger Str. 28, 85521 Ottobrunn</p>
+            </div>
+            <div className="relative w-full h-96">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2665.8!2d11.6642!3d48.0657!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDAzJzU2LjUiTiAxMcKwMzknNTEuMSJF!5e0!3m2!1sde!2sde!4v1234567890"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="MNW Mobilfunk Standort in Ottobrunn"
+              />
+            </div>
+            <div className="p-4 bg-gray-50 text-center">
+              <a
+                href="https://www.google.com/maps/dir//48.0657,11.6642"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+              >
+                Route planen
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
