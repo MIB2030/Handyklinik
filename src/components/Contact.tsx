@@ -14,6 +14,7 @@ interface CompanyInfo {
 
 interface GoogleSettings {
   api_key: string;
+  place_id: string;
 }
 
 export default function Contact() {
@@ -27,6 +28,7 @@ export default function Contact() {
     city: 'Ottobrunn',
   });
   const [googleApiKey, setGoogleApiKey] = useState<string>('');
+  const [placeId, setPlaceId] = useState<string>('');
 
   useEffect(() => {
     loadCompanyInfo();
@@ -47,11 +49,12 @@ export default function Contact() {
   const loadGoogleSettings = async () => {
     const { data } = await supabase
       .from('google_settings')
-      .select('api_key')
+      .select('api_key, place_id')
       .maybeSingle();
 
     if (data) {
-      setGoogleApiKey(data.api_key);
+      if (data.api_key) setGoogleApiKey(data.api_key);
+      if (data.place_id) setPlaceId(data.place_id);
     }
   };
 
@@ -178,9 +181,9 @@ export default function Contact() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
-                {googleApiKey ? (
+                {googleApiKey && placeId ? (
                   <iframe
-                    src={`https://www.google.com/maps/embed/v1/place?key=${googleApiKey}&q=${encodeURIComponent(companyInfo.street + ', ' + companyInfo.postal_code + ' ' + companyInfo.city)}&zoom=15`}
+                    src={`https://www.google.com/maps/embed/v1/place?key=${googleApiKey}&q=place_id:${placeId}&zoom=16`}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
