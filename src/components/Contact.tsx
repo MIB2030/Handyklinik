@@ -22,9 +22,11 @@ export default function Contact() {
     postal_code: '85521',
     city: 'Ottobrunn',
   });
+  const [googleMapsUrl, setGoogleMapsUrl] = useState('');
 
   useEffect(() => {
     loadCompanyInfo();
+    loadGoogleMapsSettings();
   }, []);
 
   const loadCompanyInfo = async () => {
@@ -35,6 +37,19 @@ export default function Contact() {
 
     if (data) {
       setCompanyInfo(data);
+    }
+  };
+
+  const loadGoogleMapsSettings = async () => {
+    const { data } = await supabase
+      .from('google_settings')
+      .select('api_key, place_id')
+      .maybeSingle();
+
+    if (data?.api_key && data?.place_id) {
+      setGoogleMapsUrl(
+        `https://www.google.com/maps/embed/v1/place?key=${data.api_key}&q=place_id:${data.place_id}`
+      );
     }
   };
 
@@ -161,17 +176,19 @@ export default function Contact() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
-                <iframe
-                  src="https://maps.google.com/maps?q=Handyklinik+Ottobrunn+Unterhachingerstr.+28,+85521+Ottobrunn&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="MNW Mobilfunk Standort in Ottobrunn"
-                  className="absolute inset-0"
-                />
+                {googleMapsUrl && (
+                  <iframe
+                    src={googleMapsUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="MNW Mobilfunk Standort in Ottobrunn"
+                    className="absolute inset-0"
+                  />
+                )}
               </div>
               <div className="p-8 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white">
                 <div className="mb-6">
