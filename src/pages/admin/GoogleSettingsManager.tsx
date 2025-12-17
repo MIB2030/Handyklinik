@@ -57,18 +57,20 @@ export default function GoogleSettingsManager() {
     try {
       const { error } = await supabase
         .from('google_settings')
-        .update({
+        .upsert({
+          id: SETTINGS_ID,
           api_key: apiKey.trim() || null,
           place_id: placeId.trim() || null,
           auto_sync_enabled: autoSync,
           updated_at: new Date().toISOString(),
-        })
-        .eq('id', SETTINGS_ID);
+        }, {
+          onConflict: 'id'
+        });
 
       if (error) throw error;
 
       setMessage({ type: 'success', text: 'Einstellungen erfolgreich gespeichert!' });
-      fetchSettings();
+      await fetchSettings();
     } catch (error) {
       console.error('Error saving settings:', error);
       setMessage({ type: 'error', text: 'Fehler beim Speichern der Einstellungen' });
