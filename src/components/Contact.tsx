@@ -47,9 +47,9 @@ export default function Contact() {
       .maybeSingle();
 
     if (data?.api_key && data?.place_id) {
-      setGoogleMapsUrl(
-        `https://www.google.com/maps/embed/v1/place?key=${data.api_key}&q=place_id:${data.place_id}`
-      );
+      const url = `https://www.google.com/maps/embed/v1/place?key=${data.api_key}&q=place_id:${data.place_id}`;
+      console.log('Google Maps URL:', url);
+      setGoogleMapsUrl(url);
     }
   };
 
@@ -176,18 +176,22 @@ export default function Contact() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
-                {googleMapsUrl && (
+                {googleMapsUrl ? (
                   <iframe
-                    src={googleMapsUrl}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
-                    allowFullScreen
                     loading="lazy"
+                    allowFullScreen
                     referrerPolicy="no-referrer-when-downgrade"
+                    src={googleMapsUrl}
                     title="MNW Mobilfunk Standort in Ottobrunn"
                     className="absolute inset-0"
                   />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                    <p className="text-gray-500">Karte wird geladen...</p>
+                  </div>
                 )}
               </div>
               <div className="p-8 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white">
