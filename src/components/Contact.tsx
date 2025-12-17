@@ -23,6 +23,7 @@ export default function Contact() {
     city: 'Ottobrunn',
   });
   const [googleMapsUrl, setGoogleMapsUrl] = useState('');
+  const [isMapLoading, setIsMapLoading] = useState(true);
 
   useEffect(() => {
     loadCompanyInfo();
@@ -41,29 +42,47 @@ export default function Contact() {
   };
 
   const loadGoogleMapsSettings = async () => {
-    const { data, error } = await supabase
-      .from('google_settings')
-      .select('api_key, place_id')
-      .maybeSingle();
+    try {
+      setIsMapLoading(true);
+      const { data, error } = await supabase
+        .from('google_settings')
+        .select('api_key, place_id')
+        .maybeSingle();
 
-    if (error) {
-      console.error('Fehler beim Laden der Google Settings:', error);
-      return;
+      console.log('Maps Data von DB:', data);
+      console.log('Maps Error von DB:', error);
+
+      if (error) {
+        console.error('Fehler beim Laden der Google Settings:', error);
+        setIsMapLoading(false);
+        return;
+      }
+
+      if (!data) {
+        console.warn('Keine Google Settings in der Datenbank gefunden');
+        setIsMapLoading(false);
+        return;
+      }
+
+      if (!data.api_key || !data.place_id) {
+        console.warn('API Key oder Place ID fehlt:', {
+          hasApiKey: !!data.api_key,
+          hasPlaceId: !!data.place_id,
+          apiKey: data.api_key ? `${data.api_key.substring(0, 10)}...` : 'undefined',
+          placeId: data.place_id || 'undefined'
+        });
+        setIsMapLoading(false);
+        return;
+      }
+
+      const url = `https://www.google.com/maps/embed/v1/place?key=${data.api_key}&q=place_id:${data.place_id}`;
+      console.log('Google Maps URL generiert:', url);
+      setGoogleMapsUrl(url);
+      setIsMapLoading(false);
+    } catch (err) {
+      console.error('Unerwarteter Fehler beim Laden der Map-Settings:', err);
+      setIsMapLoading(false);
     }
-
-    if (!data) {
-      console.warn('Keine Google Settings in der Datenbank gefunden');
-      return;
-    }
-
-    if (!data.api_key || !data.place_id) {
-      console.warn('API Key oder Place ID fehlt:', { api_key: !!data.api_key, place_id: !!data.place_id });
-      return;
-    }
-
-    const url = `https://www.google.com/maps/embed/v1/place?key=${data.api_key}&q=place_id:${data.place_id}`;
-    console.log('Google Maps URL generiert:', url);
-    setGoogleMapsUrl(url);
   };
 
   return (
@@ -189,21 +208,37 @@ export default function Contact() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
-                {googleMapsUrl ? (
+                {isMapLoading ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                      <p className="text-gray-500">Karte wird geladen...</p>
+                    </div>
+                  </div>
+                ) : googleMapsUrl ? (
                   <iframe
                     width="100%"
                     height="100%"
-                    style={{ border: 0 }}
+                    style={{ border: 0, minHeight: '400px' }}
                     loading="lazy"
                     allowFullScreen
                     referrerPolicy="no-referrer-when-downgrade"
                     src={googleMapsUrl}
                     title="MNW Mobilfunk Standort in Ottobrunn"
                     className="absolute inset-0"
+                    onError={() => {
+                      console.error('Google Maps iframe konnte nicht geladen werden');
+                    }}
+                    onLoad={() => {
+                      console.log('Google Maps iframe erfolgreich geladen');
+                    }}
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                    <p className="text-gray-500">Karte wird geladen...</p>
+                    <div className="text-center px-4">
+                      <p className="text-gray-700 font-medium mb-2">Karte nicht verfügbar</p>
+                      <p className="text-gray-500 text-sm">Google Maps Einstellungen fehlen in der Datenbank</p>
+                    </div>
                   </div>
                 )}
               </div>
