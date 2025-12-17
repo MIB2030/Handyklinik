@@ -127,11 +127,11 @@ export default function GoogleSettingsManager() {
               Google Places API Key
             </label>
             <input
-              type="text"
+              type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder="AIzaSy..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="••••••••••••••••••••"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
             />
             <p className="mt-1 text-xs text-gray-500">
               Ihr API-Schlüssel aus der Google Cloud Console
@@ -144,11 +144,11 @@ export default function GoogleSettingsManager() {
               Google Place ID
             </label>
             <input
-              type="text"
+              type="password"
               value={placeId}
               onChange={(e) => setPlaceId(e.target.value)}
-              placeholder="ChIJ..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="••••••••••••••••••••"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
             />
             <p className="mt-1 text-xs text-gray-500">
               Die eindeutige ID Ihres Google Business Profils
