@@ -162,13 +162,11 @@ export default function Contact() {
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2665.058470284897!2d11.664158315674912!3d48.060853279222384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479de0021300db47%3A0x808d127082be25e2!2sMNW%20Mobilfunk!5e0!3m2!1sde!2sde!4v1734432000000!5m2!1sde!2sde"
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=11.662158%2C48.059853%2C11.666158%2C48.061853&layer=mapnik&marker=48.060853%2C11.664158"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
-                  allowFullScreen
                   loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
                   title="MNW Mobilfunk Standort in Ottobrunn"
                   className="absolute inset-0"
                 />
