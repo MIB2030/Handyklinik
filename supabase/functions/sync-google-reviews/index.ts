@@ -62,36 +62,45 @@ Deno.serve(async (req: Request) => {
 
     for (const review of reviews) {
       const googleReviewId = `${PLACE_ID}_${review.time}`;
-      
+
       const { data: existingReview } = await supabase
         .from("google_reviews")
-        .select("id")
+        .select("id, is_visible, is_featured")
         .eq("google_review_id", googleReviewId)
         .maybeSingle();
 
-      const reviewData = {
-        google_review_id: googleReviewId,
-        author_name: review.author_name,
-        author_photo_url: review.profile_photo_url || null,
-        rating: review.rating,
-        text: review.text || null,
-        time: new Date(review.time * 1000).toISOString(),
-        relative_time_description: review.relative_time_description,
-        is_visible: true,
-        is_featured: review.rating === 5,
-        updated_at: new Date().toISOString(),
-      };
-
       if (existingReview) {
+        const updateData = {
+          author_name: review.author_name,
+          author_photo_url: review.profile_photo_url || null,
+          rating: review.rating,
+          text: review.text || null,
+          time: new Date(review.time * 1000).toISOString(),
+          relative_time_description: review.relative_time_description,
+          updated_at: new Date().toISOString(),
+        };
+
         await supabase
           .from("google_reviews")
-          .update(reviewData)
+          .update(updateData)
           .eq("id", existingReview.id);
         updatedReviewsCount++;
       } else {
+        const insertData = {
+          google_review_id: googleReviewId,
+          author_name: review.author_name,
+          author_photo_url: review.profile_photo_url || null,
+          rating: review.rating,
+          text: review.text || null,
+          time: new Date(review.time * 1000).toISOString(),
+          relative_time_description: review.relative_time_description,
+          is_visible: true,
+          is_featured: review.rating === 5,
+        };
+
         await supabase
           .from("google_reviews")
-          .insert(reviewData);
+          .insert(insertData);
         newReviewsCount++;
       }
     }

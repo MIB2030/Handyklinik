@@ -142,7 +142,7 @@ export default function GoogleReviewsManager() {
         throw new Error(result.error || 'Sync failed');
       }
 
-      alert(`Erfolg! ${result.reviews_count} Bewertungen synchronisiert (${result.new_reviews_count} neu)`);
+      alert(`Erfolg! ${result.totalReviews} Bewertungen synchronisiert (${result.newReviews} neu, ${result.updatedReviews} aktualisiert)`);
       await fetchReviews();
       await fetchSyncLogs();
     } catch (error: any) {
