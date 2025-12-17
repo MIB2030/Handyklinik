@@ -67,6 +67,42 @@ export default function Contact() {
             </div>
           </button>
 
+          <div className="mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-4xl font-bold text-gray-900 mb-3">Unser Partner</h2>
+              <p className="text-lg text-gray-600">Vertrauen durch Zertifizierung</p>
+            </div>
+
+            <button
+              onClick={() => setIsWertgarantieModalOpen(true)}
+              className="w-full bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-blue-200 hover:border-blue-300 group"
+            >
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="flex items-center gap-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                    <Shield className="w-10 h-10 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">WERTGARANTIE</h3>
+                    <p className="text-gray-600 text-base">
+                      Zertifizierter Reparaturpartner für Versicherungsschäden
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <img
+                    src="/wertgarantie_logo_1.jpg"
+                    alt="WERTGARANTIE Logo"
+                    className="h-16 w-auto object-contain"
+                  />
+                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl group-hover:from-blue-600 group-hover:to-blue-700 transition-all">
+                    <div className="text-sm font-semibold">Mehr erfahren →</div>
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-3">Kontakt & Informationen</h2>
             <p className="text-lg text-gray-600">Wir sind für Sie da</p>
@@ -120,42 +156,6 @@ export default function Contact() {
                 <p className="text-xs text-gray-500 mt-4">Termine auch außerhalb möglich</p>
               </div>
             </div>
-          </div>
-
-          <div className="mb-12">
-            <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold text-gray-900 mb-3">Unser Partner</h2>
-              <p className="text-lg text-gray-600">Vertrauen durch Zertifizierung</p>
-            </div>
-
-            <button
-              onClick={() => setIsWertgarantieModalOpen(true)}
-              className="w-full bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-blue-200 hover:border-blue-300 group"
-            >
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="flex items-center gap-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <Shield className="w-10 h-10 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">WERTGARANTIE</h3>
-                    <p className="text-gray-600 text-base">
-                      Zertifizierter Reparaturpartner für Versicherungsschäden
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-6">
-                  <img
-                    src="/wertgarantie_logo_1.jpg"
-                    alt="WERTGARANTIE Logo"
-                    className="h-16 w-auto object-contain"
-                  />
-                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl group-hover:from-blue-600 group-hover:to-blue-700 transition-all">
-                    <div className="text-sm font-semibold">Mehr erfahren →</div>
-                  </div>
-                </div>
-              </div>
-            </button>
           </div>
 
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
