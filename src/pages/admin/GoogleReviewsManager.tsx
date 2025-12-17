@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Star, RefreshCw, Eye, EyeOff, TrendingUp, Calendar, Check, X, Award } from 'lucide-react';
+import { Star, RefreshCw, Eye, EyeOff, TrendingUp, Calendar, Check, X, Award, Plus } from 'lucide-react';
 
 interface GoogleReview {
   id: string;
@@ -57,6 +57,15 @@ export default function GoogleReviewsManager() {
   const [syncing, setSyncing] = useState(false);
   const [filterRating, setFilterRating] = useState<number | 'all'>('all');
   const [showOnlyVisible, setShowOnlyVisible] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [manualReview, setManualReview] = useState({
+    author_name: '',
+    rating: 5,
+    text: '',
+    time: new Date().toISOString().split('T')[0],
+    author_photo_url: '',
+  });
 
   useEffect(() => {
     fetchReviews();
@@ -153,6 +162,49 @@ export default function GoogleReviewsManager() {
     }
   };
 
+  const handleManualImport = async () => {
+    if (!manualReview.author_name || !manualReview.text) {
+      alert('Bitte Name und Bewertungstext ausfüllen');
+      return;
+    }
+
+    setImporting(true);
+    try {
+      const timestamp = new Date(manualReview.time).getTime();
+      const googleReviewId = `manual_${timestamp}_${manualReview.author_name.replace(/\s/g, '_')}`;
+
+      const { error } = await supabase.from('google_reviews').insert({
+        google_review_id: googleReviewId,
+        author_name: manualReview.author_name,
+        author_photo_url: manualReview.author_photo_url || null,
+        rating: manualReview.rating,
+        text: manualReview.text,
+        time: new Date(manualReview.time).toISOString(),
+        relative_time_description: 'Manuell importiert',
+        is_visible: true,
+        is_featured: manualReview.rating === 5,
+      });
+
+      if (error) throw error;
+
+      alert('Bewertung erfolgreich hinzugefügt!');
+      setShowImportModal(false);
+      setManualReview({
+        author_name: '',
+        rating: 5,
+        text: '',
+        time: new Date().toISOString().split('T')[0],
+        author_photo_url: '',
+      });
+      await fetchReviews();
+    } catch (error: any) {
+      console.error('Error importing review:', error);
+      alert(`Fehler beim Importieren: ${error.message}`);
+    } finally {
+      setImporting(false);
+    }
+  };
+
   const toggleVisibility = async (review: GoogleReview) => {
     try {
       const { error } = await supabase
@@ -238,14 +290,23 @@ export default function GoogleReviewsManager() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Google Reviews Verwaltung</h1>
-        <button
-          onClick={handleSync}
-          disabled={syncing}
-          className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <RefreshCw className={`w-5 h-5 ${syncing ? 'animate-spin' : ''}`} />
-          <span>{syncing ? 'Synchronisiere...' : 'Jetzt synchronisieren'}</span>
-        </button>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="inline-flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Manuell hinzufügen</span>
+          </button>
+          <button
+            onClick={handleSync}
+            disabled={syncing}
+            className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <RefreshCw className={`w-5 h-5 ${syncing ? 'animate-spin' : ''}`} />
+            <span>{syncing ? 'Synchronisieren' : 'Google Sync'}</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -440,6 +501,122 @@ export default function GoogleReviewsManager() {
           )}
         </div>
       </div>
+
+      {showImportModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-900">Bewertung manuell hinzufügen</h2>
+                <button
+                  onClick={() => setShowImportModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <p className="text-sm text-gray-600 mt-2">
+                Hinweis: Google Places API gibt max. 5 Reviews zurück. Hier können Sie weitere Bewertungen manuell hinzufügen.
+              </p>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Name des Bewerters *
+                </label>
+                <input
+                  type="text"
+                  value={manualReview.author_name}
+                  onChange={(e) => setManualReview({ ...manualReview, author_name: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="z.B. Max Mustermann"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Bewertung *
+                </label>
+                <div className="flex items-center space-x-2">
+                  {[1, 2, 3, 4, 5].map((rating) => (
+                    <button
+                      key={rating}
+                      onClick={() => setManualReview({ ...manualReview, rating })}
+                      className="focus:outline-none"
+                    >
+                      <Star
+                        className={`w-8 h-8 transition-colors ${
+                          rating <= manualReview.rating
+                            ? 'text-yellow-400 fill-yellow-400'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                  <span className="ml-2 text-lg font-medium text-gray-700">
+                    {manualReview.rating} Stern{manualReview.rating !== 1 ? 'e' : ''}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Bewertungstext *
+                </label>
+                <textarea
+                  value={manualReview.text}
+                  onChange={(e) => setManualReview({ ...manualReview, text: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  rows={4}
+                  placeholder="Bewertungstext..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Datum der Bewertung *
+                </label>
+                <input
+                  type="date"
+                  value={manualReview.time}
+                  onChange={(e) => setManualReview({ ...manualReview, time: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Profilbild-URL (optional)
+                </label>
+                <input
+                  type="url"
+                  value={manualReview.author_photo_url}
+                  onChange={(e) => setManualReview({ ...manualReview, author_photo_url: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-200 flex items-center justify-end space-x-3">
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={handleManualImport}
+                disabled={importing}
+                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {importing ? 'Wird hinzugefügt...' : 'Bewertung hinzufügen'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
