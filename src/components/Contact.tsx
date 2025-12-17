@@ -181,7 +181,7 @@ export default function Contact() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
-                {googleApiKey && placeId ? (
+                {googleApiKey?.trim() && placeId?.trim() ? (
                   <iframe
                     src={`https://www.google.com/maps/embed/v1/place?key=${googleApiKey}&q=place_id:${placeId}&zoom=16`}
                     width="100%"
