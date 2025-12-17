@@ -36,17 +36,44 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
+    let triggeredBy = 'manual';
+
+    if (req.method === 'POST') {
+      try {
+        const body = await req.json();
+        triggeredBy = body.triggeredBy || 'manual';
+      } catch {
+        triggeredBy = 'manual';
+      }
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const { data: settings, error: settingsError } = await supabase
       .from("google_settings")
-      .select("api_key, place_id")
+      .select("api_key, place_id, auto_sync_enabled")
       .single();
 
     if (settingsError || !settings || !settings.api_key || !settings.place_id) {
       throw new Error("Google Places API nicht konfiguriert. Bitte konfiguriere die API-Einstellungen im Admin-Bereich unter 'Google Einstellungen'.");
+    }
+
+    if (triggeredBy === 'cron' && !settings.auto_sync_enabled) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Auto-Sync ist deaktiviert',
+          skipped: true,
+        }),
+        {
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      );
     }
 
     const GOOGLE_API_KEY = settings.api_key;
@@ -101,8 +128,15 @@ Deno.serve(async (req: Request) => {
       reviews_count: reviews.length,
       new_reviews_count: newReviewsCount,
       status: "success",
-      triggered_by: "manual",
+      triggered_by: triggeredBy,
     });
+
+    if (triggeredBy === 'cron') {
+      await supabase
+        .from('google_settings')
+        .update({ last_sync_at: new Date().toISOString() })
+        .eq('id', '00000000-0000-0000-0000-000000000001');
+    }
 
     return new Response(
       JSON.stringify({
@@ -122,9 +156,18 @@ Deno.serve(async (req: Request) => {
       }
     );
   } catch (error) {
+    let triggeredBy = 'manual';
+
+    try {
+      const body = await req.json();
+      triggeredBy = body.triggeredBy || 'manual';
+    } catch {
+      triggeredBy = 'manual';
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    
+
     if (supabaseUrl && supabaseServiceKey) {
       const supabase = createClient(supabaseUrl, supabaseServiceKey);
       await supabase.from("google_reviews_sync_log").insert({
@@ -132,7 +175,7 @@ Deno.serve(async (req: Request) => {
         new_reviews_count: 0,
         status: "error",
         error_message: error.message,
-        triggered_by: "manual",
+        triggered_by: triggeredBy,
       });
     }
 
