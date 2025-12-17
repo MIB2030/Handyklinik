@@ -208,32 +208,19 @@ export default function Contact() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
-                {isMapLoading ? (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                    <div className="text-center">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                      <p className="text-gray-500">Karte wird geladen...</p>
-                    </div>
-                  </div>
-                ) : googleMapsUrl ? (
+                {googleMapsUrl && (
                   <iframe
                     width="100%"
                     height="100%"
                     style={{ border: 0, minHeight: '400px' }}
-                    loading="lazy"
                     allowFullScreen
                     referrerPolicy="no-referrer-when-downgrade"
                     src={googleMapsUrl}
                     title="MNW Mobilfunk Standort in Ottobrunn"
                     className="absolute inset-0"
-                    onError={() => {
-                      console.error('Google Maps iframe konnte nicht geladen werden');
-                    }}
-                    onLoad={() => {
-                      console.log('Google Maps iframe erfolgreich geladen');
-                    }}
                   />
-                ) : (
+                )}
+                {!googleMapsUrl && !isMapLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
                     <div className="text-center px-4">
                       <p className="text-gray-700 font-medium mb-2">Karte nicht verfügbar</p>
