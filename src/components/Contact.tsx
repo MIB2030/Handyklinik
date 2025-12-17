@@ -162,7 +162,7 @@ export default function Contact() {
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2665.8!2d11.6642!3d48.0657!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDAzJzU2LjUiTiAxMcKwMzknNTEuMSJF!5e0!3m2!1sde!2sde!4v1234567890"
+                  src="https://www.google.com/maps?q=Unterhachinger+Str.+28,+85521+Ottobrunn&output=embed"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -184,7 +184,7 @@ export default function Contact() {
                 </div>
                 <div className="space-y-3">
                   <a
-                    href="https://www.google.com/maps/dir//48.0657,11.6642"
+                    href={`https://www.google.com/maps/dir//${encodeURIComponent(companyInfo.street + ', ' + companyInfo.postal_code + ' ' + companyInfo.city)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center"
