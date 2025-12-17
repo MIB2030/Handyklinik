@@ -103,23 +103,12 @@ export default function PopManager() {
 
     try {
       if (editingId) {
-        console.log('UPDATE: Editing ID:', editingId);
-        console.log('UPDATE: Form Data:', formData);
-
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('announcements')
           .update(formData)
-          .eq('id', editingId)
-          .select();
+          .eq('id', editingId);
 
-        console.log('UPDATE: Response data:', data);
-        console.log('UPDATE: Response error:', error);
-
-        if (error) {
-          console.error('UPDATE ERROR:', error);
-          throw error;
-        }
-
+        if (error) throw error;
         setSuccessMessage('Änderungen wurden gespeichert und sind sofort für Endkunden sichtbar!');
       } else {
         const { error } = await supabase
@@ -139,12 +128,12 @@ export default function PopManager() {
         end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)
       });
       setEditingId(null);
-      await loadAnnouncements();
+      loadAnnouncements();
 
       setTimeout(() => setSuccessMessage(null), 5000);
     } catch (err) {
       setError('Fehler beim Speichern der Ankündigung');
-      console.error('SUBMIT ERROR:', err);
+      console.error(err);
     }
   };
 
