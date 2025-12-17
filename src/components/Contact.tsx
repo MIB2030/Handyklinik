@@ -160,17 +160,30 @@ export default function Contact() {
 
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
-              <div className="relative h-80 md:h-auto">
-                <iframe
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=11.6623%2C48.0612%2C11.6723%2C48.0672&layer=mapnik&marker=48.0642%2C11.6673"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  loading="lazy"
-                  title="MNW Mobilfunk Standort in Ottobrunn"
-                  className="absolute inset-0"
-                />
-              </div>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyInfo.street + ', ' + companyInfo.postal_code + ' ' + companyInfo.city)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative h-80 md:h-auto block group cursor-pointer"
+                title="In Google Maps öffnen"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
+                  <div className="text-center space-y-4">
+                    <div className="w-20 h-20 mx-auto bg-blue-600 rounded-full flex items-center justify-center group-hover:bg-blue-700 transition-colors">
+                      <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <div className="px-6">
+                      <p className="text-lg font-bold text-gray-900 mb-1">Standort in Karte anzeigen</p>
+                      <p className="text-sm text-gray-600">{companyInfo.street}</p>
+                      <p className="text-sm text-gray-600">{companyInfo.postal_code} {companyInfo.city}</p>
+                      <p className="text-xs text-blue-600 mt-3 font-semibold group-hover:underline">Jetzt in Google Maps öffnen →</p>
+                    </div>
+                  </div>
+                </div>
+              </a>
               <div className="p-8 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white">
                 <div className="mb-6">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Besuchen Sie uns</h3>
