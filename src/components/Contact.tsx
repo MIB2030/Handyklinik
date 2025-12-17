@@ -162,7 +162,7 @@ export default function Contact() {
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
                 <iframe
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(companyInfo.street + ', ' + companyInfo.postal_code + ' ' + companyInfo.city)}&output=embed`}
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(companyInfo.street + ', ' + companyInfo.postal_code + ' ' + companyInfo.city)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
