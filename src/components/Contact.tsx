@@ -42,12 +42,37 @@ export default function Contact() {
     <>
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <button
+            onClick={() => setIsVoucherModalOpen(true)}
+            className="w-full bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-8 mb-12 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-yellow-200 hover:border-yellow-300 group"
+          >
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <Gift className="w-10 h-10 text-white" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Exklusiver Reparatur-Gutschein</h3>
+                  <p className="text-gray-600 text-base">
+                    Sichere dir jetzt deinen <span className="font-bold text-yellow-600">10€ Gutschein</span> auf deine nächste Reparatur!
+                  </p>
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 text-white px-8 py-4 rounded-xl group-hover:from-yellow-500 group-hover:to-yellow-600 transition-all">
+                  <div className="text-4xl font-black mb-1">10€</div>
+                  <div className="text-sm font-semibold">Jetzt einlösen →</div>
+                </div>
+              </div>
+            </div>
+          </button>
+
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-3">Kontakt & Informationen</h2>
             <p className="text-lg text-gray-600">Wir sind für Sie da</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <button
               onClick={() => setIsContactModalOpen(true)}
               className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-300 hover:-translate-y-1"
@@ -95,25 +120,6 @@ export default function Contact() {
                 <p className="text-xs text-gray-500 mt-4">Termine auch außerhalb möglich</p>
               </div>
             </div>
-
-            <button
-              onClick={() => setIsVoucherModalOpen(true)}
-              className="group bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="flex flex-col items-center text-center h-full justify-between">
-                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-3">
-                  <Gift className="w-7 h-7 text-yellow-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Gutschein</h3>
-                  <div className="text-5xl font-black text-white mb-1">10€</div>
-                  <p className="text-sm font-semibold text-gray-900">Reparatur-Gutschein</p>
-                </div>
-                <div className="mt-4 text-xs font-semibold text-gray-900 bg-white/30 px-4 py-2 rounded-full">
-                  Jetzt sichern!
-                </div>
-              </div>
-            </button>
 
             <button
               onClick={() => setIsWertgarantieModalOpen(true)}
