@@ -14,9 +14,8 @@ interface AuthContextType {
   userProfile: UserProfile | null;
   isAdmin: boolean;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (username: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -66,21 +65,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   };
 
-  const signIn = async (usernameOrEmail: string, password: string) => {
-    let email = usernameOrEmail;
+  const signIn = async (username: string, password: string) => {
+    const { data, error: rpcError } = await supabase.rpc('get_email_by_username', {
+      p_username: username
+    });
 
-    if (!usernameOrEmail.includes('@')) {
-      const { data, error: rpcError } = await supabase.rpc('get_email_by_username', {
-        username_input: usernameOrEmail
-      });
-
-      if (!rpcError && data) {
-        email = data;
-      }
+    if (rpcError || !data) {
+      return { error: new Error('Benutzer nicht gefunden') };
     }
 
     const { error } = await supabase.auth.signInWithPassword({
-      email,
+      email: data,
       password,
     });
     return { error };
@@ -92,13 +87,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUserProfile(null);
   };
 
-  const resetPassword = async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/admin`,
-    });
-    return { error };
-  };
-
   const value = {
     user,
     userRole,
@@ -107,7 +95,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     signIn,
     signOut,
-    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

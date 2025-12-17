@@ -8,13 +8,11 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isResetMode, setIsResetMode] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const { signIn, resetPassword } = useAuth();
+  const { signIn } = useAuth();
 
   useEffect(() => {
     if (isOpen) {
@@ -33,38 +31,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccessMessage('');
     setLoading(true);
 
-    if (isResetMode) {
-      const { error: resetError } = await resetPassword(usernameOrEmail);
+    const { error: signInError } = await signIn(username, password);
 
-      if (resetError) {
-        setError('Fehler beim Zurücksetzen des Passworts. Bitte versuchen Sie es erneut.');
-      } else {
-        setSuccessMessage('Ein Link zum Zurücksetzen Ihres Passworts wurde an Ihre E-Mail-Adresse gesendet.');
-        setUsernameOrEmail('');
-      }
+    if (signInError) {
+      setError('Ungültige Anmeldedaten');
       setLoading(false);
     } else {
-      const { error: signInError } = await signIn(usernameOrEmail, password);
-
-      if (signInError) {
-        setError('Ungültige Anmeldedaten');
-        setLoading(false);
-      } else {
-        onClose();
-        window.location.href = '/admin';
-      }
+      onClose();
+      window.location.href = '/admin';
     }
-  };
-
-  const toggleMode = () => {
-    setIsResetMode(!isResetMode);
-    setError('');
-    setSuccessMessage('');
-    setUsernameOrEmail('');
-    setPassword('');
   };
 
   return (
@@ -84,50 +61,42 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         </div>
 
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-900">
-          {isResetMode ? 'Passwort zurücksetzen' : 'Admin Login'}
+          Admin Login
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="usernameOrEmail" className="block text-sm font-medium text-gray-700 mb-1">
-              {isResetMode ? 'E-Mail' : 'Benutzername'}
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+              Benutzername
             </label>
             <input
-              type={isResetMode ? 'email' : 'text'}
-              id="usernameOrEmail"
-              value={usernameOrEmail}
-              onChange={(e) => setUsernameOrEmail(e.target.value)}
-              placeholder={isResetMode ? 'E-Mail eingeben' : 'Benutzername eingeben'}
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Benutzername eingeben"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
 
-          {!isResetMode && (
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Passwort
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-            </div>
-          )}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              Passwort
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
 
           {error && (
             <div className="text-red-600 text-sm text-center">
               {error}
-            </div>
-          )}
-
-          {successMessage && (
-            <div className="text-green-600 text-sm text-center bg-green-50 p-3 rounded-lg">
-              {successMessage}
             </div>
           )}
 
@@ -136,20 +105,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400"
           >
-            {loading
-              ? (isResetMode ? 'Senden...' : 'Anmelden...')
-              : (isResetMode ? 'Link senden' : 'Anmelden')}
+            {loading ? 'Anmelden...' : 'Anmelden'}
           </button>
-
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={toggleMode}
-              className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
-            >
-              {isResetMode ? 'Zurück zum Login' : 'Passwort vergessen?'}
-            </button>
-          </div>
         </form>
       </div>
     </div>
