@@ -189,18 +189,17 @@ export default function Contact() {
                 <div className="space-y-2 text-sm flex-1">
                   <div className="flex justify-between items-center gap-3">
                     <span className="text-gray-600">Mo - Fr</span>
-                    <span className="font-semibold text-gray-900">09:00 - 18:00</span>
+                    <span className="font-semibold text-gray-900">09:00 - 19:00</span>
                   </div>
                   <div className="flex justify-between items-center gap-3">
                     <span className="text-gray-600">Samstag</span>
-                    <span className="font-semibold text-gray-900">10:00 - 14:00</span>
+                    <span className="font-semibold text-gray-900">09:00 - 19:00</span>
                   </div>
                   <div className="flex justify-between items-center gap-3">
                     <span className="text-gray-600">Sonntag</span>
                     <span className="font-semibold text-red-600">Geschlossen</span>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-4">Termine auch außerhalb möglich</p>
               </div>
             </div>
           </div>
