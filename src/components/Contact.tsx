@@ -12,11 +12,6 @@ interface CompanyInfo {
   city: string;
 }
 
-interface GoogleSettings {
-  api_key: string;
-  place_id: string;
-}
-
 export default function Contact() {
   const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -27,11 +22,9 @@ export default function Contact() {
     postal_code: '85521',
     city: 'Ottobrunn',
   });
-  const [googleSettings, setGoogleSettings] = useState<GoogleSettings | null>(null);
 
   useEffect(() => {
     loadCompanyInfo();
-    loadGoogleSettings();
   }, []);
 
   const loadCompanyInfo = async () => {
@@ -42,17 +35,6 @@ export default function Contact() {
 
     if (data) {
       setCompanyInfo(data);
-    }
-  };
-
-  const loadGoogleSettings = async () => {
-    const { data } = await supabase
-      .from('google_settings')
-      .select('api_key, place_id')
-      .maybeSingle();
-
-    if (data) {
-      setGoogleSettings(data);
     }
   };
 
@@ -179,35 +161,17 @@ export default function Contact() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
-                {googleSettings?.api_key && googleSettings?.place_id ? (
-                  <iframe
-                    src={`https://www.google.com/maps/embed/v1/place?key=${googleSettings.api_key}&q=place_id:${googleSettings.place_id}&zoom=15`}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="MNW Mobilfunk Standort in Ottobrunn"
-                    className="absolute inset-0"
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
-                    <div className="text-center space-y-4 px-6">
-                      <div className="w-20 h-20 mx-auto bg-blue-600 rounded-full flex items-center justify-center">
-                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold text-gray-900 mb-1">Karte wird geladen...</p>
-                        <p className="text-sm text-gray-600">{companyInfo.street}</p>
-                        <p className="text-sm text-gray-600">{companyInfo.postal_code} {companyInfo.city}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2665.058470284897!2d11.664158315674912!3d48.060853279222384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479de0021300db47%3A0x808d127082be25e2!2sMNW%20Mobilfunk!5e0!3m2!1sde!2sde!4v1734432000000!5m2!1sde!2sde"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="MNW Mobilfunk Standort in Ottobrunn"
+                  className="absolute inset-0"
+                />
               </div>
               <div className="p-8 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white">
                 <div className="mb-6">
