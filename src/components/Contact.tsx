@@ -162,11 +162,13 @@ export default function Contact() {
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-auto">
                 <iframe
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=11.662158%2C48.059853%2C11.666158%2C48.061853&layer=mapnik&marker=48.060853%2C11.664158"
+                  src="https://maps.google.com/maps?q=Handyklinik+Ottobrunn+Unterhachingerstr.+28,+85521+Ottobrunn&t=&z=15&ie=UTF8&iwloc=&output=embed"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
+                  allowFullScreen
                   loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
                   title="MNW Mobilfunk Standort in Ottobrunn"
                   className="absolute inset-0"
                 />
