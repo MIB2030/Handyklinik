@@ -10,7 +10,7 @@ export default function VoucherSlideIn() {
     if (!hasSeenSlideIn) {
       const timer = setTimeout(() => {
         setIsVisible(true);
-      }, 30000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     }
