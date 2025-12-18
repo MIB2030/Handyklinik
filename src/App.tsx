@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -14,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AnnouncementPopup from './components/AnnouncementPopup';
 import VacationBanner from './components/VacationBanner';
 import VoucherSlideIn from './components/VoucherSlideIn';
+import VoucherModal from './components/VoucherModal';
 
 const Impressum = lazy(() => import('./pages/Impressum'));
 const Datenschutz = lazy(() => import('./pages/Datenschutz'));
@@ -63,10 +64,17 @@ function HomePage() {
 }
 
 function App() {
+  const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white">
       <AnnouncementPopup />
-      <VoucherSlideIn />
+      <VoucherSlideIn onOpenVoucher={() => setIsVoucherModalOpen(true)} />
+      <VoucherModal
+        isOpen={isVoucherModalOpen}
+        onClose={() => setIsVoucherModalOpen(false)}
+        initialStep={1}
+      />
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/" element={<HomePage />} />

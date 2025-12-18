@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Gift, X } from 'lucide-react';
 
-export default function VoucherSlideIn() {
+interface VoucherSlideInProps {
+  onOpenVoucher: () => void;
+}
+
+export default function VoucherSlideIn({ onOpenVoucher }: VoucherSlideInProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -23,10 +27,7 @@ export default function VoucherSlideIn() {
 
   const handleClick = () => {
     handleClose();
-    const preisrechner = document.getElementById('preisrechner');
-    if (preisrechner) {
-      preisrechner.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    onOpenVoucher();
   };
 
   if (!isVisible) return null;
