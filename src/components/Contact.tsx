@@ -270,6 +270,7 @@ export default function Contact() {
       <VoucherModal
         isOpen={isVoucherModalOpen}
         onClose={() => setIsVoucherModalOpen(false)}
+        initialStep={3}
       />
     </>
   );
