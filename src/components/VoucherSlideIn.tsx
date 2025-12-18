@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Gift, X } from 'lucide-react';
-import VoucherModal from './VoucherModal';
 
 export default function VoucherSlideIn() {
   const [isVisible, setIsVisible] = useState(false);
-  const [showVoucherModal, setShowVoucherModal] = useState(false);
 
   useEffect(() => {
     const hasSeenSlideIn = sessionStorage.getItem('hasSeenVoucherSlideIn');
@@ -24,8 +22,11 @@ export default function VoucherSlideIn() {
   };
 
   const handleClick = () => {
-    setShowVoucherModal(true);
     handleClose();
+    const preisrechner = document.getElementById('preisrechner');
+    if (preisrechner) {
+      preisrechner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   if (!isVisible) return null;
@@ -62,13 +63,6 @@ export default function VoucherSlideIn() {
           </button>
         </div>
       </div>
-
-      {showVoucherModal && (
-        <VoucherModal
-          isOpen={showVoucherModal}
-          onClose={() => setShowVoucherModal(false)}
-        />
-      )}
     </>
   );
 }
