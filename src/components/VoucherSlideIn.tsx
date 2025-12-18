@@ -67,7 +67,6 @@ export default function VoucherSlideIn() {
         <VoucherModal
           isOpen={showVoucherModal}
           onClose={() => setShowVoucherModal(false)}
-          initialStep={3}
         />
       )}
     </>
