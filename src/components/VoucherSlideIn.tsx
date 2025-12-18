@@ -14,7 +14,7 @@ export default function VoucherSlideIn({ onOpenVoucher }: VoucherSlideInProps) {
     if (!hasSeenSlideIn) {
       const timer = setTimeout(() => {
         setIsVisible(true);
-      }, 5000);
+      }, 60000);
 
       return () => clearTimeout(timer);
     }
