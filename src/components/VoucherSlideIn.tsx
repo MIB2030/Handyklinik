@@ -7,12 +7,12 @@ export default function VoucherSlideIn() {
   const [showVoucherModal, setShowVoucherModal] = useState(false);
 
   useEffect(() => {
-    const hasSeenSlideIn = localStorage.getItem('hasSeenVoucherSlideIn');
+    const hasSeenSlideIn = sessionStorage.getItem('hasSeenVoucherSlideIn');
 
     if (!hasSeenSlideIn) {
       const timer = setTimeout(() => {
         setIsVisible(true);
-      }, 60000);
+      }, 30000);
 
       return () => clearTimeout(timer);
     }
@@ -20,7 +20,7 @@ export default function VoucherSlideIn() {
 
   const handleClose = () => {
     setIsVisible(false);
-    localStorage.setItem('hasSeenVoucherSlideIn', 'true');
+    sessionStorage.setItem('hasSeenVoucherSlideIn', 'true');
   };
 
   const handleClick = () => {
