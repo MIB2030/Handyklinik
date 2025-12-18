@@ -13,6 +13,7 @@ import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import AnnouncementPopup from './components/AnnouncementPopup';
 import VacationBanner from './components/VacationBanner';
+import VoucherSlideIn from './components/VoucherSlideIn';
 
 const Impressum = lazy(() => import('./pages/Impressum'));
 const Datenschutz = lazy(() => import('./pages/Datenschutz'));
@@ -65,6 +66,7 @@ function App() {
   return (
     <div className="min-h-screen bg-white">
       <AnnouncementPopup />
+      <VoucherSlideIn />
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
