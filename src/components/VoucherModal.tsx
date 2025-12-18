@@ -5,10 +5,11 @@ import { supabase } from '../lib/supabase';
 interface VoucherModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialStep?: number;
 }
 
-export default function VoucherModal({ isOpen, onClose }: VoucherModalProps) {
-  const [step, setStep] = useState(1);
+export default function VoucherModal({ isOpen, onClose, initialStep = 1 }: VoucherModalProps) {
+  const [step, setStep] = useState(initialStep);
   const [voucherCode, setVoucherCode] = useState('');
   const [voucherId, setVoucherId] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -18,6 +19,7 @@ export default function VoucherModal({ isOpen, onClose }: VoucherModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setStep(initialStep);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -25,7 +27,7 @@ export default function VoucherModal({ isOpen, onClose }: VoucherModalProps) {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, initialStep]);
 
   const generateVoucherCode = () => {
     const prefix = 'HK';
