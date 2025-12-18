@@ -85,19 +85,10 @@ export default function WertgarantieModal({ isOpen, onClose }: WertgarantieModal
             </div>
           </div>
 
-          <div className="space-y-3">
-            <a
-              href="https://www.wertgarantie.de"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-colors text-center text-lg"
-            >
-              WERTGARANTIE
-            </a>
-
+          <div>
             <button
               onClick={onClose}
-              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-xl transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-colors"
             >
               Schließen
             </button>
