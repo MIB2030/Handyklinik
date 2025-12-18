@@ -147,7 +147,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   <span>Anrufen</span>
                 </a>
                 <a
-                  href="https://wa.me/4908963286944?text=Hallo,%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Reparatur.%20K%C3%B6nnen%20Sie%20mir%20weiterhelfen?"
+                  href="https://wa.me/498963286944?text=Hallo,%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Reparatur.%20K%C3%B6nnen%20Sie%20mir%20weiterhelfen?"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-xl transition-colors flex items-center justify-center space-x-2"

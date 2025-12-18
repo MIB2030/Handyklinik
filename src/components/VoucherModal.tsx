@@ -433,7 +433,9 @@ export default function VoucherModal({ isOpen, onClose, initialStep = 1 }: Vouch
                     <div className="font-bold text-gray-900 mb-2">MNW Mobilfunk</div>
                     <div className="text-sm text-gray-600 space-y-1">
                       <div>Unterhachinger Str. 28, 85521 Ottobrunn</div>
-                      <div>Tel: 089 / 63 28 69 44</div>
+                      <div>
+                        Tel: <a href="tel:08963286944" className="text-blue-600 hover:text-blue-700">089 / 63 28 69 44</a>
+                      </div>
                     </div>
                   </div>
                 </div>
