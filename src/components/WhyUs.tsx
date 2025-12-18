@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Clock, Shield, Database, CheckCircle, Award, TrendingUp, ChevronRight } from 'lucide-react';
+import { Clock, Shield, Database, CheckCircle, Award, TrendingUp, ExternalLink } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface PageTexts {
@@ -46,7 +46,6 @@ const defaultFeatures = [
 ];
 
 export default function WhyUs() {
-  const [isFlipped, setIsFlipped] = useState(false);
   const [texts, setTexts] = useState<PageTexts>({});
 
   useEffect(() => {
@@ -101,104 +100,26 @@ export default function WhyUs() {
           })}
         </div>
 
-        {/* Flip Card for detailed info */}
-        <div className="perspective-1000 mt-8">
-          <div
-            onClick={() => setIsFlipped(!isFlipped)}
-            className="relative w-full cursor-pointer preserve-3d transition-all duration-700"
-            style={{
-              transformStyle: 'preserve-3d',
-              transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-              minHeight: isFlipped ? '600px' : '120px'
-            }}
-          >
-            {/* Front */}
-            <div
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 border-2 border-blue-800 shadow-xl backface-hidden"
-              style={{ backfaceVisibility: 'hidden' }}
-            >
-              <div className="flex items-center justify-center space-x-4">
-                <Shield className="w-10 h-10 text-white" />
-                <h3 className="text-2xl font-bold text-white">
-                  {getText('front_title', 'Mehr über uns - MNW Mobilfunk erfahren')}
-                </h3>
-                <ChevronRight className={`w-6 h-6 text-white transition-transform ${isFlipped ? 'rotate-90' : ''}`} />
-              </div>
-              <p className="text-blue-100 text-center mt-2">
-                {getText('front_subtitle', 'Klicken Sie hier für Details')}
+        {/* Call to Action - MNW Mobilfunk */}
+        <div className="mt-8">
+          <div className="w-full bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 border-2 border-blue-800 shadow-xl">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <Shield className="w-12 h-12 text-white" />
+              <h3 className="text-2xl font-bold text-white">
+                Mehr über uns - MNW Mobilfunk erfahren
+              </h3>
+              <p className="text-blue-100 max-w-2xl">
+                Entdecken Sie unser komplettes Leistungsspektrum rund um Mobilfunk, DSL, Glasfaser und mehr auf unserer Hauptwebseite.
               </p>
-            </div>
-
-            {/* Back */}
-            <div
-              className="absolute top-0 left-0 w-full bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 border-2 border-blue-200 shadow-xl backface-hidden"
-              style={{
-                backfaceVisibility: 'hidden',
-                transform: 'rotateY(180deg)'
-              }}
-            >
-              <div className="max-h-[550px] overflow-y-auto pr-4">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <Shield className="w-8 h-8 text-blue-600 mr-3" />
-                  {getText('back_title', 'Ihr Vorteil seit über 20 Jahren')}
-                </h3>
-
-                <div className="space-y-6 text-gray-700">
-                  <p className="leading-relaxed">
-                    {getText('back_intro', '')}
-                  </p>
-
-                  <div>
-                    <h4 className="font-bold text-lg text-gray-900 mb-2 flex items-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                      {getText('section1_title', 'Unabhängige Beratung')}
-                    </h4>
-                    <p className="leading-relaxed">
-                      {getText('section1_text', '')}
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-bold text-lg text-gray-900 mb-2 flex items-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                      {getText('section2_title', 'Rundum‑Service für Ihr Smartphone')}
-                    </h4>
-                    <p className="leading-relaxed">
-                      {getText('section2_text', '')}
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-bold text-lg text-gray-900 mb-2 flex items-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                      {getText('section3_title', 'Komplettlösungen für Zuhause und das Büro')}
-                    </h4>
-                    <p className="leading-relaxed">
-                      {getText('section3_text', '')}
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-bold text-lg text-gray-900 mb-2 flex items-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                      {getText('section4_title', 'Persönlicher Ansprechpartner im Isarcenter')}
-                    </h4>
-                    <p className="leading-relaxed">
-                      {getText('section4_text', '')}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-gray-200">
-                    <p className="text-center font-bold text-xl text-blue-600">
-                      {getText('footer_text', 'MNW Mobilfunk – Wir verbinden Ottobrunn.')}
-                    </p>
-                  </div>
-                </div>
-
-                <p className="text-blue-600 text-center mt-6 text-sm font-medium">
-                  {getText('back_subtitle', 'Klicken Sie erneut, um zurückzukehren')}
-                </p>
-              </div>
+              <a
+                href="https://mobilfunk-service-ottobrunn.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-blue-50 transition-all duration-300 hover:scale-105 shadow-lg"
+              >
+                Zur MNW Mobilfunk Website
+                <ExternalLink className="w-5 h-5" />
+              </a>
             </div>
           </div>
         </div>
