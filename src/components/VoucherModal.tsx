@@ -52,9 +52,17 @@ export default function VoucherModal({ isOpen, onClose }: VoucherModalProps) {
           }
         ])
         .select()
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      if (!data) {
+        console.error('No data returned from insert');
+        throw new Error('Gutschein wurde erstellt, aber nicht zurückgegeben');
+      }
 
       setVoucherId(data.id);
       setVoucherCode(code);
@@ -62,7 +70,8 @@ export default function VoucherModal({ isOpen, onClose }: VoucherModalProps) {
       setStep(4);
     } catch (error) {
       console.error('Error creating voucher:', error);
-      alert('Fehler beim Erstellen des Gutscheins. Bitte versuchen Sie es erneut.');
+      const errorMessage = error instanceof Error ? error.message : 'Unbekannter Fehler';
+      alert(`Fehler beim Erstellen des Gutscheins: ${errorMessage}\n\nBitte versuchen Sie es erneut.`);
     } finally {
       setIsGenerating(false);
     }
