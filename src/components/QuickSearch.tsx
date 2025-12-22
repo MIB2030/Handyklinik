@@ -165,6 +165,11 @@ export default function QuickSearch({ onSelect }: QuickSearchProps) {
                   </div>
                 </button>
               ))}
+              <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
+                <p className="text-xs text-gray-500 text-center">
+                  Alle Preisangaben sind unverbindlich und dienen zur Orientierung
+                </p>
+              </div>
             </div>
           ) : (
             <div className="px-6 py-8 text-center">

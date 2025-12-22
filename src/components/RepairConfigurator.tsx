@@ -478,6 +478,9 @@ export default function RepairConfigurator() {
                     />
                   ))}
                 </div>
+                <p className="text-center text-xs text-gray-500 mt-6 px-4">
+                  Alle Preisangaben sind unverbindlich. Der endgültige Preis wird nach Diagnose des Geräts festgelegt.
+                </p>
               </div>
             )}
           </>

@@ -130,7 +130,7 @@ export default function PriceCheck() {
           )}
 
           <p className="text-center text-xs text-gray-500 mt-4">
-            Alle Preise inkl. 19% MwSt. Tippfehler und Irrtümer vorbehalten.
+            Alle Preisangaben sind unverbindlich. Endpreis nach Diagnose. Inkl. 19% MwSt.
           </p>
         </div>
       </div>
