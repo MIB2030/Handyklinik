@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, MessageCircle } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
+import ContactModal from './ContactModal';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -24,6 +25,7 @@ export default function QuickSearch({ onSelect }: QuickSearchProps) {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
@@ -163,13 +165,33 @@ export default function QuickSearch({ onSelect }: QuickSearchProps) {
               ))}
             </div>
           ) : (
-            <div className="px-6 py-8 text-center text-gray-600">
-              <p className="text-lg font-medium mb-2">Keine Ergebnisse gefunden</p>
-              <p className="text-sm">Versuchen Sie eine andere Schreibweise oder nutzen Sie den Konfigurator unten</p>
+            <div className="px-6 py-8 text-center">
+              <p className="text-lg font-semibold text-gray-900 mb-2">Keine Ergebnisse gefunden</p>
+              <p className="text-sm text-gray-600 mb-4">Versuchen Sie eine andere Schreibweise oder nutzen Sie den Konfigurator unten</p>
+              <div className="border-t border-gray-200 pt-4 mt-4">
+                <p className="text-sm text-gray-700 mb-3">
+                  <strong>Handy nicht dabei?</strong> Kontaktieren Sie uns direkt!
+                </p>
+                <button
+                  onClick={() => {
+                    setShowContactModal(true);
+                    setIsOpen(false);
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors inline-flex items-center gap-2 text-sm"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Jetzt kontaktieren
+                </button>
+              </div>
             </div>
           )}
         </div>
       )}
+
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
     </div>
   );
 }

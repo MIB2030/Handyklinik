@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Info, ChevronRight, Euro, MessageCircle, Mail } from 'lucide-react';
+import { Info, ChevronRight, Euro, MessageCircle, Mail, HelpCircle } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import QuickSearch from './QuickSearch';
 import RepairRequestModal from './RepairRequestModal';
+import ContactModal from './ContactModal';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -158,6 +159,7 @@ export default function RepairConfigurator() {
     repair: string;
     price: number;
   } | null>(null);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     loadManufacturers();
@@ -390,6 +392,25 @@ export default function RepairConfigurator() {
                     />
                   ))}
                 </div>
+
+                <div className="mt-8 max-w-2xl mx-auto">
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 text-center">
+                    <div className="flex items-center justify-center mb-3">
+                      <HelpCircle className="w-6 h-6 text-blue-600 mr-2" />
+                      <h4 className="text-lg font-bold text-gray-900">Handy nicht gefunden?</h4>
+                    </div>
+                    <p className="text-gray-700 mb-4">
+                      Kein Problem! Kontaktieren Sie uns direkt - wir helfen Ihnen gerne weiter und erstellen Ihnen ein individuelles Angebot.
+                    </p>
+                    <button
+                      onClick={() => setShowContactModal(true)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors inline-flex items-center gap-2"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      Jetzt kontaktieren
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -478,6 +499,11 @@ export default function RepairConfigurator() {
           price={emailModalData.price}
         />
       )}
+
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
     </div>
   );
 }
