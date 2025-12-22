@@ -170,7 +170,7 @@ export default function QuickSearch({ onSelect }: QuickSearchProps) {
               <p className="text-sm text-gray-600 mb-4">Versuchen Sie eine andere Schreibweise oder nutzen Sie den Konfigurator unten</p>
               <div className="border-t border-gray-200 pt-4 mt-4">
                 <p className="text-sm text-gray-700 mb-3">
-                  <strong>Handy nicht dabei?</strong> Kontaktieren Sie uns direkt!
+                  <strong>Reparatur nicht gefunden?</strong> Kontaktieren Sie uns direkt!
                 </p>
                 <button
                   onClick={() => {

@@ -397,7 +397,7 @@ export default function RepairConfigurator() {
                   <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 text-center">
                     <div className="flex items-center justify-center mb-3">
                       <HelpCircle className="w-6 h-6 text-blue-600 mr-2" />
-                      <h4 className="text-lg font-bold text-gray-900">Handy nicht gefunden?</h4>
+                      <h4 className="text-lg font-bold text-gray-900">Reparatur nicht gefunden?</h4>
                     </div>
                     <p className="text-gray-700 mb-4">
                       Kein Problem! Kontaktieren Sie uns direkt - wir helfen Ihnen gerne weiter und erstellen Ihnen ein individuelles Angebot.
