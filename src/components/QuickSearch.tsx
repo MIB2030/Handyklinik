@@ -14,6 +14,7 @@ interface SearchResult {
   modell: string;
   reparatur: string;
   preis: number;
+  preis_prefix?: string;
 }
 
 interface QuickSearchProps {
@@ -74,7 +75,7 @@ export default function QuickSearch({ onSelect }: QuickSearchProps) {
         console.error('Search error:', error);
         const { data: fallbackData } = await supabase
           .from('repair_prices')
-          .select('id, hersteller, modell, reparatur, preis')
+          .select('id, hersteller, modell, reparatur, preis, preis_prefix')
           .or(`hersteller.ilike.%${searchQuery}%,modell.ilike.%${searchQuery}%,reparatur.ilike.%${searchQuery}%`)
           .limit(10);
 
@@ -156,6 +157,7 @@ export default function QuickSearch({ onSelect }: QuickSearchProps) {
                     </div>
                     <div className="ml-4 text-right">
                       <div className="text-xl font-bold text-blue-600">
+                        {result.preis_prefix && <span className="text-sm mr-1">{result.preis_prefix}</span>}
                         {result.preis.toFixed(2).replace('.', ',')} €
                       </div>
                       <div className="text-xs text-gray-500">inkl. MwSt.</div>

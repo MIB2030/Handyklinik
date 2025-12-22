@@ -17,6 +17,7 @@ interface RepairPrice {
   reparatur: string;
   preis: number;
   beschreibung: string;
+  preis_prefix?: string;
 }
 
 interface SearchResult {
@@ -25,6 +26,7 @@ interface SearchResult {
   modell: string;
   reparatur: string;
   preis: number;
+  preis_prefix?: string;
 }
 
 interface ManufacturerCardProps {
@@ -59,6 +61,7 @@ interface RepairCardProps {
 
 function RepairCard({ repair, onWhatsAppClick, onEmailClick, onInfoClick }: RepairCardProps) {
   const isBackcoverRepair = repair.reparatur.toLowerCase().includes('backcover') || repair.reparatur.toLowerCase().includes('wasserschaden');
+  const showPricePrefix = repair.preis_prefix || isBackcoverRepair;
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
@@ -66,7 +69,7 @@ function RepairCard({ repair, onWhatsAppClick, onEmailClick, onInfoClick }: Repa
         <div className="flex-1">
           <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{repair.reparatur}</h4>
           <p className="text-2xl sm:text-3xl font-bold text-blue-600 flex items-center gap-1">
-            {isBackcoverRepair && <span className="text-lg sm:text-xl mr-1">ab</span>}
+            {showPricePrefix && <span className="text-lg sm:text-xl mr-1">{repair.preis_prefix || 'ab'}</span>}
             {repair.preis.toFixed(2).replace('.', ',')} <Euro className="w-5 h-5 sm:w-6 sm:h-6" />
           </p>
           <p className="text-xs sm:text-sm text-gray-500 mt-1">inkl. 19% MwSt.</p>
