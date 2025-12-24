@@ -15,6 +15,7 @@ interface SearchResult {
   reparatur: string;
   preis: number;
   preis_prefix?: string;
+  similarity_score?: number;
 }
 
 interface QuickSearchProps {
@@ -81,7 +82,11 @@ export default function QuickSearch({ onSelect }: QuickSearchProps) {
 
         setResults(fallbackData || []);
       } else {
-        setResults(data || []);
+        const MIN_RELEVANCE_SCORE = 0.4;
+        const relevantResults = (data || []).filter(
+          (result: SearchResult) => (result.similarity_score || 0) >= MIN_RELEVANCE_SCORE
+        );
+        setResults(relevantResults);
       }
 
       setIsOpen(true);
