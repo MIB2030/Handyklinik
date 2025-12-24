@@ -16,6 +16,8 @@ import VacationBanner from './components/VacationBanner';
 import VoucherSlideIn from './components/VoucherSlideIn';
 import VoucherModal from './components/VoucherModal';
 import ScrollToTop from './components/ScrollToTop';
+import CookieConsent, { CookiePreferencesButton } from './components/CookieConsent';
+import { initializeAnalytics } from './lib/analytics';
 
 const Impressum = lazy(() => import('./pages/Impressum'));
 const Datenschutz = lazy(() => import('./pages/Datenschutz'));
@@ -67,8 +69,16 @@ function HomePage() {
 function App() {
   const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
 
+  const handleConsentChange = (consent: 'all' | 'essential' | null) => {
+    if (consent === 'all') {
+      initializeAnalytics();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <CookieConsent onConsentChange={handleConsentChange} />
+      <CookiePreferencesButton />
       <AnnouncementPopup />
       <VoucherSlideIn onOpenVoucher={() => setIsVoucherModalOpen(true)} />
       <VoucherModal

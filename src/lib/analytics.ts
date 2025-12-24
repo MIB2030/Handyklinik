@@ -8,8 +8,34 @@ declare global {
 export const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || '';
 export const GA_ENABLED = !!GA_MEASUREMENT_ID;
 
+export const hasAnalyticsConsent = (): boolean => {
+  const consent = localStorage.getItem('cookieConsent');
+  return consent === 'all';
+};
+
+export const initializeAnalytics = () => {
+  if (!GA_ENABLED || !hasAnalyticsConsent()) {
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  document.head.appendChild(script);
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag() {
+    window.dataLayer?.push(arguments);
+  };
+  window.gtag('js', new Date());
+  window.gtag('config', GA_MEASUREMENT_ID, {
+    anonymize_ip: true,
+    cookie_flags: 'SameSite=None;Secure',
+  });
+};
+
 export const pageview = (url: string) => {
-  if (GA_ENABLED && typeof window.gtag !== 'undefined') {
+  if (GA_ENABLED && hasAnalyticsConsent() && typeof window.gtag !== 'undefined') {
     window.gtag('config', GA_MEASUREMENT_ID, {
       page_path: url,
     });
@@ -17,7 +43,7 @@ export const pageview = (url: string) => {
 };
 
 export const event = (action: string, params?: Record<string, any>) => {
-  if (GA_ENABLED && typeof window.gtag !== 'undefined') {
+  if (GA_ENABLED && hasAnalyticsConsent() && typeof window.gtag !== 'undefined') {
     window.gtag('event', action, params);
   }
 };
