@@ -15,6 +15,7 @@ import AnnouncementPopup from './components/AnnouncementPopup';
 import VacationBanner from './components/VacationBanner';
 import VoucherSlideIn from './components/VoucherSlideIn';
 import VoucherModal from './components/VoucherModal';
+import ScrollToTop from './components/ScrollToTop';
 
 const Impressum = lazy(() => import('./pages/Impressum'));
 const Datenschutz = lazy(() => import('./pages/Datenschutz'));
@@ -76,6 +77,7 @@ function App() {
         initialStep={1}
       />
       <Suspense fallback={<LoadingSpinner />}>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/impressum" element={<Impressum />} />
