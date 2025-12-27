@@ -130,29 +130,31 @@ export default function Hero() {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % slides.length);
   };
 
-  if (slides.length === 0) {
-    return null;
-  }
-
   return (
     <section className="relative h-[500px] sm:h-[600px] md:h-[650px] flex items-center justify-center overflow-hidden group">
       <div className="absolute inset-0">
-        {slides.map((slide, index) => (
-          <img
-            key={slide.id}
-            src={slide.image_url}
-            alt={slide.alt_text}
-            className={`absolute w-full h-full object-cover object-center transition-opacity duration-[2000ms] ease-in-out ${
-              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{
-              minHeight: '100%',
-              minWidth: '100%',
-              display: 'block'
-            }}
-            fetchPriority={index === 0 ? 'high' : 'low'}
-          />
-        ))}
+        {slides.length > 0 ? (
+          <>
+            {slides.map((slide, index) => (
+              <img
+                key={slide.id}
+                src={slide.image_url}
+                alt={slide.alt_text}
+                className={`absolute w-full h-full object-cover object-center transition-opacity duration-[2000ms] ease-in-out ${
+                  index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{
+                  minHeight: '100%',
+                  minWidth: '100%',
+                  display: 'block'
+                }}
+                fetchPriority={index === 0 ? 'high' : 'low'}
+              />
+            ))}
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800"></div>
+        )}
         <div
           className="absolute inset-0"
           style={{ backgroundColor: `rgba(0, 0, 0, ${textSettings.overlay_opacity / 100})` }}
