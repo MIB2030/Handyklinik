@@ -192,7 +192,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
               <div className="space-y-6">
                 <div>
                   <div className="text-blue-100 text-sm mb-2 font-medium">Abgabe & Abholung</div>
-                  <div className="text-2xl font-bold">Mo-Fr: 9:00 - 19:00 Uhr</div>
+                  <div className="text-2xl font-bold">Mo-Sa: 9:00 - 19:00 Uhr</div>
                 </div>
 
                 <div className="border-t border-blue-400 my-4"></div>
