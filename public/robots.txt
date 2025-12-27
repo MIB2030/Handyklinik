@@ -1,11 +1,11 @@
 # robots.txt für MNW Mobilfunk
-# Letzte Aktualisierung: 2025-12-06
+# Letzte Aktualisierung: 2025-12-27
 
 User-agent: *
 Allow: /
 
 # Sitemap Location
-Sitemap: https://mnw-mobilfunk.de/sitemap.xml
+Sitemap: https://handyklinikottobrunn.de/sitemap.xml
 
 # Crawl-Delay
 Crawl-delay: 10
