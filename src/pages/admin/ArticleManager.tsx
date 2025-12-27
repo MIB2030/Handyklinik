@@ -735,7 +735,7 @@ export default function ArticleManager() {
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     {article.image_url && (
-                      <img src={article.image_url} alt="" className="w-12 h-12 object-cover rounded" />
+                      <img src={article.image_url} alt={article.title} className="w-12 h-12 object-cover rounded" />
                     )}
                     <div>
                       <div className="font-medium">{article.title}</div>
