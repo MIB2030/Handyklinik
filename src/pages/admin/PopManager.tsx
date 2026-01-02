@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Eye, EyeOff, AlertCircle, X, Play } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, AlertCircle, X, Play, Pause } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface Announcement {
@@ -10,6 +10,7 @@ interface Announcement {
   content_type: 'text' | 'html';
   html_content?: string;
   is_active: boolean;
+  is_paused: boolean;
   start_date: string;
   end_date: string;
   created_at: string;
@@ -203,13 +204,40 @@ export default function PopManager() {
     }
   };
 
+  const togglePause = async (id: string, currentStatus: boolean) => {
+    setError(null);
+    setSuccessMessage(null);
+
+    try {
+      const { error } = await supabase
+        .from('announcements')
+        .update({ is_paused: !currentStatus })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      const newStatus = !currentStatus;
+      setSuccessMessage(
+        newStatus
+          ? 'Pop-up wurde pausiert und ist vorübergehend nicht sichtbar!'
+          : 'Pop-up wurde fortgesetzt und ist wieder für Endkunden sichtbar!'
+      );
+
+      loadAnnouncements();
+      setTimeout(() => setSuccessMessage(null), 5000);
+    } catch (err) {
+      setError('Fehler beim Aktualisieren des Pause-Status');
+      console.error(err);
+    }
+  };
+
   const getColorClasses = (color: string) => {
     const option = colorOptions.find(opt => opt.value === color);
     return option || colorOptions[1];
   };
 
   const isActive = (announcement: Announcement) => {
-    if (!announcement.is_active) return false;
+    if (!announcement.is_active || announcement.is_paused) return false;
     const now = new Date();
     const start = new Date(announcement.start_date);
     const end = new Date(announcement.end_date);
@@ -661,6 +689,30 @@ export default function PopManager() {
                           </>
                         )}
                       </button>
+
+                      {announcement.is_active && (
+                        <button
+                          onClick={() => togglePause(announcement.id, announcement.is_paused)}
+                          className={`px-4 py-2 rounded-lg transition-all font-medium text-sm flex items-center gap-2 ${
+                            announcement.is_paused
+                              ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200 border border-yellow-300'
+                              : 'bg-blue-100 text-blue-700 hover:bg-blue-200 border border-blue-300'
+                          }`}
+                          title={announcement.is_paused ? 'Pop-up fortsetzen' : 'Pop-up pausieren'}
+                        >
+                          {announcement.is_paused ? (
+                            <>
+                              <Play className="w-4 h-4" />
+                              <span className="hidden sm:inline">Pausiert</span>
+                            </>
+                          ) : (
+                            <>
+                              <Pause className="w-4 h-4" />
+                              <span className="hidden sm:inline">Läuft</span>
+                            </>
+                          )}
+                        </button>
+                      )}
 
                       <div className="flex gap-2">
                         <button

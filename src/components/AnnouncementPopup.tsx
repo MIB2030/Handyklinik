@@ -65,6 +65,7 @@ export default function AnnouncementPopup() {
         .from('announcements')
         .select('id, title, message, color, content_type, html_content')
         .eq('is_active', true)
+        .eq('is_paused', false)
         .lte('start_date', new Date().toISOString())
         .gte('end_date', new Date().toISOString())
         .order('created_at', { ascending: false });
