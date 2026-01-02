@@ -58,6 +58,18 @@ export default function AnnouncementPopup() {
     loadAnnouncement();
   }, []);
 
+  useEffect(() => {
+    // Message-Listener für iframe close events
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'CLOSE_POPUP') {
+        handleDismiss();
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [announcement]);
+
   const loadAnnouncement = async () => {
     try {
       const dismissedIds = JSON.parse(sessionStorage.getItem('dismissedAnnouncements') || '[]');
