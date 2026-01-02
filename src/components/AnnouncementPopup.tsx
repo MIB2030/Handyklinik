@@ -9,6 +9,7 @@ interface Announcement {
   color: 'red' | 'blue' | 'green' | 'orange' | 'yellow';
   content_type: 'text' | 'html';
   html_content?: string;
+  is_paused?: boolean;
 }
 
 const colorClasses = {
@@ -63,9 +64,8 @@ export default function AnnouncementPopup() {
 
       let query = supabase
         .from('announcements')
-        .select('id, title, message, color, content_type, html_content')
+        .select('id, title, message, color, content_type, html_content, is_paused')
         .eq('is_active', true)
-        .eq('is_paused', false)
         .lte('start_date', new Date().toISOString())
         .gte('end_date', new Date().toISOString())
         .order('created_at', { ascending: false });
@@ -76,9 +76,12 @@ export default function AnnouncementPopup() {
 
       const { data, error } = await query.limit(1).maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Fehler beim Laden der Ankündigung:', error);
+        return;
+      }
 
-      if (data) {
+      if (data && data.is_paused !== true) {
         setAnnouncement(data);
         setIsVisible(true);
       }
