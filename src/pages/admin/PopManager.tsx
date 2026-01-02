@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Eye, EyeOff, AlertCircle, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, AlertCircle, X, Play } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface Announcement {
@@ -78,6 +78,7 @@ export default function PopManager() {
   });
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [previewAnnouncement, setPreviewAnnouncement] = useState<Announcement | null>(null);
 
   useEffect(() => {
     loadAnnouncements();
@@ -662,6 +663,13 @@ export default function PopManager() {
                       </button>
 
                       <div className="flex gap-2">
+                        <button
+                          onClick={() => setPreviewAnnouncement(announcement)}
+                          className="p-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors"
+                          title="Vorschau"
+                        >
+                          <Play className="w-5 h-5" />
+                        </button>
 
                         <button
                           onClick={() => handleEdit(announcement)}
@@ -687,6 +695,105 @@ export default function PopManager() {
           </div>
         )}
       </div>
+
+      {previewAnnouncement && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 animate-fadeIn">
+          {previewAnnouncement.content_type === 'html' && previewAnnouncement.html_content ? (
+            <div
+              className="relative w-full h-full max-w-7xl max-h-[95vh] bg-white rounded-2xl shadow-2xl overflow-hidden animate-slideUp"
+              role="dialog"
+              aria-label="Vorschau"
+            >
+              <button
+                onClick={() => setPreviewAnnouncement(null)}
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-red-600 hover:bg-red-700 text-white transition-all hover:scale-110 shadow-lg"
+                aria-label="Schließen"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <iframe
+                srcDoc={previewAnnouncement.html_content}
+                className="w-full h-full border-0"
+                title="Vorschau"
+                sandbox="allow-same-origin allow-scripts allow-forms"
+              />
+            </div>
+          ) : (
+            <div
+              className={`relative w-full max-w-lg ${popupColorClasses[previewAnnouncement.color].bg} ${popupColorClasses[previewAnnouncement.color].border} border-2 rounded-2xl shadow-2xl p-6 md:p-8 animate-slideUp`}
+              role="dialog"
+              aria-labelledby="preview-title"
+              aria-describedby="preview-message"
+            >
+              <button
+                onClick={() => setPreviewAnnouncement(null)}
+                className={`absolute top-4 right-4 p-2 rounded-full ${popupColorClasses[previewAnnouncement.color].button} text-white transition-all hover:scale-110`}
+                aria-label="Schließen"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="pr-10">
+                {previewAnnouncement.title && (
+                  <h2
+                    id="preview-title"
+                    className={`text-2xl md:text-3xl font-bold ${popupColorClasses[previewAnnouncement.color].title} mb-4`}
+                  >
+                    {previewAnnouncement.title}
+                  </h2>
+                )}
+
+                <p
+                  id="preview-message"
+                  className={`text-base md:text-lg ${popupColorClasses[previewAnnouncement.color].text} whitespace-pre-wrap leading-relaxed`}
+                >
+                  {previewAnnouncement.message}
+                </p>
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => setPreviewAnnouncement(null)}
+                  className={`px-6 py-3 ${popupColorClasses[previewAnnouncement.color].button} text-white font-semibold rounded-lg transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-opacity-50`}
+                >
+                  Verstanden
+                </button>
+              </div>
+            </div>
+          )}
+
+          <style>{`
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+              }
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes slideUp {
+              from {
+                transform: translateY(20px);
+                opacity: 0;
+              }
+              to {
+                transform: translateY(0);
+                opacity: 1;
+              }
+            }
+
+            .animate-fadeIn {
+              animation: fadeIn 0.3s ease-out;
+            }
+
+            .animate-slideUp {
+              animation: slideUp 0.4s ease-out;
+            }
+          `}</style>
+        </div>
+      )}
     </div>
   );
 }
