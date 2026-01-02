@@ -7,6 +7,8 @@ interface Announcement {
   title: string;
   message: string;
   color: 'red' | 'blue' | 'green' | 'orange' | 'yellow';
+  content_type: 'text' | 'html';
+  html_content?: string;
   is_active: boolean;
   start_date: string;
   end_date: string;
@@ -68,6 +70,8 @@ export default function PopManager() {
     title: '',
     message: '',
     color: 'blue' as Announcement['color'],
+    content_type: 'text' as 'text' | 'html',
+    html_content: '',
     is_active: true,
     start_date: new Date().toISOString().slice(0, 16),
     end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)
@@ -123,6 +127,8 @@ export default function PopManager() {
         title: '',
         message: '',
         color: 'blue',
+        content_type: 'text',
+        html_content: '',
         is_active: true,
         start_date: new Date().toISOString().slice(0, 16),
         end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)
@@ -142,6 +148,8 @@ export default function PopManager() {
       title: announcement.title,
       message: announcement.message,
       color: announcement.color,
+      content_type: announcement.content_type,
+      html_content: announcement.html_content || '',
       is_active: announcement.is_active,
       start_date: new Date(announcement.start_date).toISOString().slice(0, 16),
       end_date: new Date(announcement.end_date).toISOString().slice(0, 16)
@@ -252,61 +260,119 @@ export default function PopManager() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Titel (optional)
-            </label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="z.B. Wichtige Ankündigung"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nachricht *
-            </label>
-            <textarea
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              required
-              rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Ihre Ankündigungsnachricht..."
-            />
-          </div>
-
-          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Farbe *
+              Inhaltstyp *
             </label>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {colorOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-all ${
-                    formData.color === option.value
-                      ? `${option.borderClass} ${option.bgClass}`
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="color"
-                    value={option.value}
-                    checked={formData.color === option.value}
-                    onChange={(e) => setFormData({ ...formData, color: e.target.value as Announcement['color'] })}
-                    className="w-4 h-4"
-                  />
-                  <span className={`font-medium ${formData.color === option.value ? option.textClass : 'text-gray-700'}`}>
-                    {option.label}
-                  </span>
-                </label>
-              ))}
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="content_type"
+                  value="text"
+                  checked={formData.content_type === 'text'}
+                  onChange={(e) => setFormData({ ...formData, content_type: 'text' })}
+                  className="w-4 h-4"
+                />
+                <span className="text-sm font-medium text-gray-700">Kurzer Text</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="content_type"
+                  value="html"
+                  checked={formData.content_type === 'html'}
+                  onChange={(e) => setFormData({ ...formData, content_type: 'html' })}
+                  className="w-4 h-4"
+                />
+                <span className="text-sm font-medium text-gray-700">HTML-Code (Vollbild)</span>
+              </label>
             </div>
+            <p className="text-xs text-gray-500 mt-1">
+              {formData.content_type === 'text'
+                ? 'Einfaches Text-Popup mit Titel und Nachricht'
+                : 'Vollständige HTML-Seite im Popup (z.B. Stellenanzeige)'}
+            </p>
           </div>
+
+          {formData.content_type === 'text' ? (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Titel (optional)
+                </label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="z.B. Wichtige Ankündigung"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Nachricht *
+                </label>
+                <textarea
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required={formData.content_type === 'text'}
+                  rows={4}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Ihre Ankündigungsnachricht..."
+                />
+              </div>
+            </>
+          ) : (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                HTML-Code *
+              </label>
+              <textarea
+                value={formData.html_content}
+                onChange={(e) => setFormData({ ...formData, html_content: e.target.value })}
+                required={formData.content_type === 'html'}
+                rows={12}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                placeholder="<!DOCTYPE html>&#10;<html>&#10;<head>&#10;  <title>Ihre Seite</title>&#10;</head>&#10;<body>&#10;  ...&#10;</body>&#10;</html>"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Vollständiger HTML-Code inkl. &lt;html&gt;, &lt;head&gt; und &lt;body&gt; Tags
+              </p>
+            </div>
+          )}
+
+          {formData.content_type === 'text' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Farbe *
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {colorOptions.map((option) => (
+                  <label
+                    key={option.value}
+                    className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-all ${
+                      formData.color === option.value
+                        ? `${option.borderClass} ${option.bgClass}`
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="color"
+                      value={option.value}
+                      checked={formData.color === option.value}
+                      onChange={(e) => setFormData({ ...formData, color: e.target.value as Announcement['color'] })}
+                      className="w-4 h-4"
+                    />
+                    <span className={`font-medium ${formData.color === option.value ? option.textClass : 'text-gray-700'}`}>
+                      {option.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -383,6 +449,8 @@ export default function PopManager() {
                     title: '',
                     message: '',
                     color: 'blue',
+                    content_type: 'text',
+                    html_content: '',
                     is_active: true,
                     start_date: new Date().toISOString().slice(0, 16),
                     end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)
@@ -406,7 +474,25 @@ export default function PopManager() {
           </div>
 
           <div className="relative bg-gray-100 rounded-lg p-4 min-h-[400px] flex items-center justify-center">
-            {formData.message ? (
+            {formData.content_type === 'html' && formData.html_content ? (
+              <div className="relative w-full h-[500px]">
+                <div className="absolute top-2 right-2 z-10">
+                  <button
+                    type="button"
+                    className="p-2 rounded-full bg-red-600 text-white shadow-lg"
+                    disabled
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <iframe
+                  srcDoc={formData.html_content}
+                  className="w-full h-full border-2 border-gray-300 rounded-lg"
+                  title="HTML Vorschau"
+                  sandbox="allow-same-origin allow-scripts allow-forms"
+                />
+              </div>
+            ) : formData.content_type === 'text' && formData.message ? (
               <div className="relative w-full max-w-md">
                 <div
                   className={`relative ${popupColorClasses[formData.color].bg} ${popupColorClasses[formData.color].border} border-2 rounded-2xl shadow-2xl p-6 md:p-8`}
@@ -449,7 +535,11 @@ export default function PopManager() {
             ) : (
               <div className="text-center text-gray-500">
                 <AlertCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p className="text-sm">Geben Sie eine Nachricht ein, um die Vorschau zu sehen</p>
+                <p className="text-sm">
+                  {formData.content_type === 'text'
+                    ? 'Geben Sie eine Nachricht ein, um die Vorschau zu sehen'
+                    : 'Geben Sie HTML-Code ein, um die Vorschau zu sehen'}
+                </p>
               </div>
             )}
           </div>
@@ -457,7 +547,11 @@ export default function PopManager() {
           <div className="mt-4 text-xs text-gray-500 space-y-1">
             <p>• Die Vorschau zeigt das exakte Design des Popups</p>
             <p>• Buttons in der Vorschau sind deaktiviert</p>
-            <p>• Das echte Popup wird mittig auf dem Bildschirm angezeigt</p>
+            {formData.content_type === 'html' ? (
+              <p>• HTML-Popups werden im Vollbild angezeigt</p>
+            ) : (
+              <p>• Das echte Popup wird mittig auf dem Bildschirm angezeigt</p>
+            )}
           </div>
         </div>
       </div>
@@ -482,13 +576,24 @@ export default function PopManager() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 space-y-2">
                       <div className="flex items-center gap-3 flex-wrap">
-                        {announcement.title && (
+                        {announcement.content_type === 'text' && announcement.title && (
                           <h3 className="text-lg font-semibold text-gray-900">
                             {announcement.title}
                           </h3>
                         )}
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${colorClasses.bgClass} ${colorClasses.textClass}`}>
-                          {colorOptions.find(opt => opt.value === announcement.color)?.label.split(' ')[0]}
+                        {announcement.content_type === 'html' && (
+                          <h3 className="text-lg font-semibold text-gray-900">
+                            HTML Pop-up
+                          </h3>
+                        )}
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          announcement.content_type === 'html'
+                            ? 'bg-purple-100 text-purple-800'
+                            : `${colorClasses.bgClass} ${colorClasses.textClass}`
+                        }`}>
+                          {announcement.content_type === 'html'
+                            ? 'HTML (Vollbild)'
+                            : colorOptions.find(opt => opt.value === announcement.color)?.label.split(' ')[0]}
                         </span>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                           active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
@@ -497,7 +602,11 @@ export default function PopManager() {
                         </span>
                       </div>
 
-                      <p className="text-gray-700 whitespace-pre-wrap">{announcement.message}</p>
+                      {announcement.content_type === 'text' ? (
+                        <p className="text-gray-700 whitespace-pre-wrap">{announcement.message}</p>
+                      ) : (
+                        <p className="text-gray-600 text-sm italic">HTML-Code ({announcement.html_content?.length || 0} Zeichen)</p>
+                      )}
 
                       <div className="text-sm text-gray-500 space-y-1">
                         <div>
@@ -506,15 +615,27 @@ export default function PopManager() {
                         </div>
                       </div>
 
-                      <div className={`mt-3 p-4 rounded-lg border-2 ${colorClasses.bgClass} ${colorClasses.borderClass}`}>
-                        <p className="text-sm text-gray-600 mb-2">Vorschau:</p>
-                        {announcement.title && (
-                          <h4 className={`text-lg font-bold mb-2 ${colorClasses.textClass}`}>
-                            {announcement.title}
-                          </h4>
-                        )}
-                        <p className={`${colorClasses.textClass}`}>{announcement.message}</p>
-                      </div>
+                      {announcement.content_type === 'text' ? (
+                        <div className={`mt-3 p-4 rounded-lg border-2 ${colorClasses.bgClass} ${colorClasses.borderClass}`}>
+                          <p className="text-sm text-gray-600 mb-2">Vorschau:</p>
+                          {announcement.title && (
+                            <h4 className={`text-lg font-bold mb-2 ${colorClasses.textClass}`}>
+                              {announcement.title}
+                            </h4>
+                          )}
+                          <p className={`${colorClasses.textClass}`}>{announcement.message}</p>
+                        </div>
+                      ) : (
+                        <div className="mt-3 p-4 rounded-lg border-2 bg-gray-50 border-gray-300">
+                          <p className="text-sm text-gray-600 mb-2">HTML Vorschau:</p>
+                          <div className="bg-white border border-gray-300 rounded p-2 max-h-40 overflow-auto">
+                            <code className="text-xs text-gray-700 whitespace-pre-wrap font-mono">
+                              {announcement.html_content?.substring(0, 200)}
+                              {(announcement.html_content?.length || 0) > 200 && '...'}
+                            </code>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col gap-2">

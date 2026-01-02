@@ -7,6 +7,8 @@ interface Announcement {
   title: string;
   message: string;
   color: 'red' | 'blue' | 'green' | 'orange' | 'yellow';
+  content_type: 'text' | 'html';
+  html_content?: string;
 }
 
 const colorClasses = {
@@ -61,7 +63,7 @@ export default function AnnouncementPopup() {
 
       let query = supabase
         .from('announcements')
-        .select('id, title, message, color')
+        .select('id, title, message, color, content_type, html_content')
         .eq('is_active', true)
         .lte('start_date', new Date().toISOString())
         .gte('end_date', new Date().toISOString())
@@ -98,6 +100,63 @@ export default function AnnouncementPopup() {
   }
 
   const colors = colorClasses[announcement.color];
+
+  if (announcement.content_type === 'html' && announcement.html_content) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 animate-fadeIn">
+        <div
+          className="relative w-full h-full max-w-7xl max-h-[95vh] bg-white rounded-2xl shadow-2xl overflow-hidden animate-slideUp"
+          role="dialog"
+          aria-label="Ankündigung"
+        >
+          <button
+            onClick={handleDismiss}
+            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-red-600 hover:bg-red-700 text-white transition-all hover:scale-110 shadow-lg"
+            aria-label="Schließen"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          <iframe
+            srcDoc={announcement.html_content}
+            className="w-full h-full border-0"
+            title="Ankündigung"
+            sandbox="allow-same-origin allow-scripts allow-forms"
+          />
+        </div>
+
+        <style>{`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+
+          @keyframes slideUp {
+            from {
+              transform: translateY(20px);
+              opacity: 0;
+            }
+            to {
+              transform: translateY(0);
+              opacity: 1;
+            }
+          }
+
+          .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+          }
+
+          .animate-slideUp {
+            animation: slideUp 0.4s ease-out;
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 animate-fadeIn">
