@@ -54,6 +54,15 @@ export default function AnnouncementPopup() {
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  const handleDismiss = () => {
+    if (announcement) {
+      const dismissedIds = JSON.parse(sessionStorage.getItem('dismissedAnnouncements') || '[]');
+      dismissedIds.push(announcement.id);
+      sessionStorage.setItem('dismissedAnnouncements', JSON.stringify(dismissedIds));
+    }
+    setIsVisible(false);
+  };
+
   useEffect(() => {
     loadAnnouncement();
   }, []);
@@ -100,15 +109,6 @@ export default function AnnouncementPopup() {
     } catch (err) {
       console.error('Fehler beim Laden der Ankündigung:', err);
     }
-  };
-
-  const handleDismiss = () => {
-    if (announcement) {
-      const dismissedIds = JSON.parse(sessionStorage.getItem('dismissedAnnouncements') || '[]');
-      dismissedIds.push(announcement.id);
-      sessionStorage.setItem('dismissedAnnouncements', JSON.stringify(dismissedIds));
-    }
-    setIsVisible(false);
   };
 
   if (!isVisible || !announcement) {
